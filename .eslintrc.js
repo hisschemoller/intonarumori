@@ -8,6 +8,9 @@ module.exports = {
     '@vue/airbnb',
     '@vue/typescript/recommended',
   ],
+  ignorePatterns: [
+    'assets/fonts',
+  ],
   parserOptions: {
     ecmaVersion: 2020,
   },
