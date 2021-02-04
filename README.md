@@ -1,24 +1,3 @@
-# intonarumori
+# Intonarumori
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Javascript app using the Vue framework to create musical sounds controlled by a 3D physics engine which uses the three.js and ammo.js libraries.
