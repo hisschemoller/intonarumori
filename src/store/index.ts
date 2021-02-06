@@ -41,26 +41,3 @@ export type Store = Omit<VuexStore<State>,
     [K in keyof Getters]: ReturnType<Getters[K]>
   };
 }
-
-// import { createStore } from 'vuex';
-// import { TOGGLE_SETTINGS } from './action-types';
-
-// export default createStore({
-//   state: {
-//     isSettingsVisible: false,
-//   },
-//   mutations: {
-//     toggleSettings(state, isVisible) {
-//       console.log(isVisible);
-//       state.isSettingsVisible = isVisible;
-//     },
-//   },
-//   actions: {
-//     [TOGGLE_SETTINGS]({ commit }, { isVisible }) {
-//       console.log(isVisible);
-//       commit('toggleSettings', isVisible);
-//     },
-//   },
-//   modules: {
-//   },
-// });

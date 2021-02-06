@@ -16,8 +16,14 @@
           </div>
           <div class="settings__section-right">
             <div class="settings__section-header">MIDI</div>
-            <select class="midiin-select">
-              <option value="null">No input selected...</option>
+            <select @change="selectMIDIInput($event.target.value)" class="midiin-select">
+              <option :selected="midiSelectedInput === ''" value="">No input selected...</option>
+              <option
+                v-for="midiInput in midiInputNames"
+                :key="midiInput"
+                :selected="midiSelectedInput === midiInput">
+                {{ midiInput }}
+              </option>
             </select>
             <div class="settings__status midiin-status"></div>
           </div>
@@ -51,11 +57,23 @@ import { MutationType } from '../store/mutations';
 export default defineComponent({
   setup() {
     const store = useStore();
+
+    // settings panel
     const hideSettings = () => {
       store.commit(MutationType.ToggleSettings, false);
     };
     const showSettings = computed(() => store.state.isSettingsVisible);
-    return { hideSettings, showSettings };
+
+    // midi inputs
+    const selectMIDIInput = (name: string) => {
+      store.commit(MutationType.SelectMIDIInput, name);
+    };
+    const midiInputNames = computed(() => store.state.midiInputs);
+    const midiSelectedInput = computed(() => store.state.midiSelectedInput);
+
+    return {
+      hideSettings, midiInputNames, midiSelectedInput, selectMIDIInput, showSettings,
+    };
   },
 });
 

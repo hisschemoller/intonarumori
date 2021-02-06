@@ -7,13 +7,13 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue';
-import { mapActions } from 'vuex';
-import { ActionTypes } from '../store/actions';
+import { mapMutations } from 'vuex';
+import { MutationType } from '../store/mutations';
 
 export default defineComponent({
   methods: {
-    ...mapActions({
-      toggleSettings: ActionTypes.ToggleSettings,
+    ...mapMutations({
+      toggleSettings: MutationType.ToggleSettings,
     }),
   },
 });
