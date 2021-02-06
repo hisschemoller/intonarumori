@@ -108,22 +108,6 @@ canvas {
   background-color: var(--color-light);
   color: var(--color-dark);
 }
-#controls {
-	right: 0;
-	position: absolute;
-	top: 0;
-}
-#controls__settings {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 24px;
-  outline: none;
-  padding: 10px;
-  position: absolute;
-  right: 20px;
-  top: 20px;
-}
 
 @media (min-width: 770px) {
   .shape:before {
