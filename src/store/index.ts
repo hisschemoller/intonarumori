@@ -1,12 +1,66 @@
-import { createStore } from 'vuex';
+import {
+  createStore,
+  Store as VuexStore,
+  CommitOptions,
+  DispatchOptions,
+  createLogger,
+} from 'vuex';
+import { State, state } from './state';
+import { Mutations, mutations } from './mutations';
+import { Actions, actions } from './actions';
+import { Getters, getters } from './getters';
 
-export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  },
+export const store = createStore<State>({
+  actions,
+  getters,
+  mutations,
+  plugins: process.env.NODE_ENV === 'development' ? [createLogger()] : [],
+  state,
 });
+
+export function useStore() {
+  return store as Store;
+}
+
+export type Store = Omit<VuexStore<State>,
+'getters' | 'commit' | 'dispatch'
+> & {
+  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+    key: K,
+    payload: P,
+    options?: CommitOptions
+  ): ReturnType<Mutations[K]>;
+} & {
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload?: Parameters<Actions[K]>[1],
+    options?: DispatchOptions
+  ): ReturnType<Actions[K]>;
+} & {
+  getters: {
+    [K in keyof Getters]: ReturnType<Getters[K]>
+  };
+}
+
+// import { createStore } from 'vuex';
+// import { TOGGLE_SETTINGS } from './action-types';
+
+// export default createStore({
+//   state: {
+//     isSettingsVisible: false,
+//   },
+//   mutations: {
+//     toggleSettings(state, isVisible) {
+//       console.log(isVisible);
+//       state.isSettingsVisible = isVisible;
+//     },
+//   },
+//   actions: {
+//     [TOGGLE_SETTINGS]({ commit }, { isVisible }) {
+//       console.log(isVisible);
+//       commit('toggleSettings', isVisible);
+//     },
+//   },
+//   modules: {
+//   },
+// });
