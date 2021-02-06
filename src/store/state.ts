@@ -3,5 +3,5 @@ export type State = {
 };
 
 export const state: State = {
-  isSettingsVisible: false,
+  isSettingsVisible: true,
 };

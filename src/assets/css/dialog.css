@@ -1,0 +1,51 @@
+.dialog {
+	bottom: 0;
+	/* display: none; */
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1;
+}
+.dialog[data-show='true'] {
+	display: block;
+}
+.dialog__layer {
+	background-color: rgba(0, 0, 0, 0.4);
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.dialog__window {
+	background-color: var(--color-lightest);
+	display: block;
+	left: 50%;
+	max-width: 90vw;
+	width: 400px;
+	padding: 20px;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+.dialog__header {
+	padding-bottom: 10px;
+}
+.dialog__viewport {
+	max-height: calc(100vh - 200px);
+	overflow-y: auto;
+}
+.dialog__body {
+	display: block;
+	padding: 10px 0;
+}
+.dialog__controls {
+	display: flex;
+	padding: 10px 0 0 0;
+}
+.dialog__controls .btn:first-child {
+	margin-right: 10px;
+}
+.dialog__reject {}
+.dialog__agree {}
