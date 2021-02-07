@@ -11,7 +11,9 @@
         <div class="settings__section">
           <div class="settings__section-left">
             <div class="settings__section-header">Bluetooth</div>
-            <button type="button" class="btn ble-connect">Connect...</button>
+            <button type="button" class="btn ble-connect" @click="connectBLE">
+              Connect...
+            </button>
             <div class="settings__status ble-status">Not connected</div>
           </div>
           <div class="settings__section-right">
@@ -53,6 +55,7 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from '../store';
 import { MutationType } from '../store/mutations';
+import { connect as connectBluetooth } from '../app/bluetooth';
 
 export default defineComponent({
   setup() {
@@ -74,6 +77,11 @@ export default defineComponent({
     return {
       hideSettings, midiInputNames, midiSelectedInput, selectMIDIInput, showSettings,
     };
+  },
+  methods: {
+    connectBLE() {
+      connectBluetooth();
+    },
   },
 });
 
