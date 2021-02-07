@@ -4,12 +4,14 @@ import { State } from './state';
 export enum MutationType {
   ToggleSettings = 'TOGGLE_SETTINGS',
   SelectMIDIInput = 'SELECT_MIDI_INPUT',
+  SetBluetoothStatus = 'SET_BLUETOOTH_STATUS',
   UpdateMIDIPorts = 'UPDATE_MIDI_PORTS',
 }
 
 export type Mutations = {
   [MutationType.ToggleSettings](state: State, isVisible: boolean): void;
   [MutationType.SelectMIDIInput](state: State, name: string): void;
+  [MutationType.SetBluetoothStatus](state: State, status: number): void;
   [MutationType.UpdateMIDIPorts](state: State, midiInputs: string[]): void;
 }
 
@@ -19,6 +21,9 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationType.SelectMIDIInput](state, name) {
     state.midiSelectedInput = name;
+  },
+  [MutationType.SetBluetoothStatus](state, status) {
+    state.bluetoothStatus = status;
   },
   [MutationType.UpdateMIDIPorts](state, midiInputs) {
     state.midiInputs = midiInputs;

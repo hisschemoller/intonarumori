@@ -1,3 +1,6 @@
+import { useStore } from '../store';
+import { MutationType } from '../store/mutations';
+
 const BLUETOOTH_SERVICE_UUID = '03b80e5a-ede8-4b33-a751-6ce34ec4c700';
 let device: BluetoothDevice;
 let server: BluetoothRemoteGATTServer;
@@ -34,6 +37,7 @@ function onCharacteristicValueChanged(e: Event) {
  * Bluetooth device scan, connect and subscribe.
  */
 export async function connect() {
+  const store = useStore();
   const options = {
     filters: [{
       services: [BLUETOOTH_SERVICE_UUID],
@@ -41,11 +45,11 @@ export async function connect() {
   };
   try {
     console.log('requesting bluetooth device...');
-    // dispatch(getActions().bluetoothConnecting());
+    store.commit(MutationType.SetBluetoothStatus, BluetoothStatus.Connecting);
     device = await navigator.bluetooth.requestDevice(options);
     device.addEventListener('gattserverdisconnected', () => {
       console.log('bluetooth device disconnected');
-      // dispatch(getActions().bluetoothDisconnect());
+      store.commit(MutationType.SetBluetoothStatus, BluetoothStatus.Disconnected);
     });
     console.log('> bluetooth device found');
     if (typeof device.gatt !== 'undefined' && !device.gatt.connected) {
@@ -63,11 +67,11 @@ export async function connect() {
         await characteristic.startNotifications();
         console.log('> bluetooth subscribed to notifications');
         characteristic.addEventListener('characteristicvaluechanged', onCharacteristicValueChanged);
-        // dispatch(getActions().bluetoothSuccess());
+        store.commit(MutationType.SetBluetoothStatus, BluetoothStatus.Connected);
       }
     }
   } catch (error) {
     console.log('bluetooth error: ', error);
-    // dispatch(getActions().bluetoothError());
+    store.commit(MutationType.SetBluetoothStatus, BluetoothStatus.Error);
   }
 }

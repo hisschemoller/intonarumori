@@ -14,7 +14,7 @@
             <button type="button" class="btn ble-connect" @click="connectBLE">
               Connect...
             </button>
-            <div class="settings__status ble-status">Not connected</div>
+            <div class="settings__status ble-status">{{ bluetoothMessage }}</div>
           </div>
           <div class="settings__section-right">
             <div class="settings__section-header">MIDI</div>
@@ -55,7 +55,7 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from '../store';
 import { MutationType } from '../store/mutations';
-import { connect as connectBluetooth } from '../app/bluetooth';
+import { BluetoothStatus, connect as connectBluetooth } from '../app/bluetooth';
 
 export default defineComponent({
   setup() {
@@ -74,14 +74,29 @@ export default defineComponent({
     const midiInputNames = computed(() => store.state.midiInputs);
     const midiSelectedInput = computed(() => store.state.midiSelectedInput);
 
-    return {
-      hideSettings, midiInputNames, midiSelectedInput, selectMIDIInput, showSettings,
-    };
-  },
-  methods: {
-    connectBLE() {
+    // bluetooth
+    const connectBLE = () => {
       connectBluetooth();
-    },
+    };
+    const bluetoothMessage = computed(() => {
+      switch (store.state.bluetoothStatus) {
+        case BluetoothStatus.Connecting: return 'Connecting...';
+        case BluetoothStatus.Connected: return 'Bluetooth connected!';
+        case BluetoothStatus.Disconnected: return 'Bluetooth disconnected.';
+        case BluetoothStatus.Error: return 'Bluetooth error!';
+        default: return 'Not connected';
+      }
+    });
+
+    return {
+      bluetoothMessage,
+      connectBLE,
+      hideSettings,
+      midiInputNames,
+      midiSelectedInput,
+      selectMIDIInput,
+      showSettings,
+    };
   },
 });
 
