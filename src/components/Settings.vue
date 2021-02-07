@@ -31,7 +31,7 @@
           </div>
         </div>
         <div class="settings__section">
-          <button type="button" class="btn btn-reset">Reset</button>
+          <button type="button" class="btn btn-reset" @click="reset">Reset</button>
           <span class="settings__btn_description">Clear all data and start fresh.</span>
         </div>
       </div>
@@ -88,12 +88,18 @@ export default defineComponent({
       }
     });
 
+    // reset
+    const reset = () => {
+      store.commit(MutationType.Reset, undefined);
+    };
+
     return {
       bluetoothMessage,
       connectBLE,
       hideSettings,
       midiInputNames,
       midiSelectedInput,
+      reset,
       selectMIDIInput,
       showSettings,
     };
