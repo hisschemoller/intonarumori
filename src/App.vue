@@ -1,4 +1,5 @@
 <template>
+  <WebGL />
   <Controls />
   <Settings />
 </template>
@@ -7,12 +8,14 @@
 import { Options, Vue } from 'vue-class-component';
 import Controls from './components/Controls.vue';
 import Settings from './components/Settings.vue';
+import WebGL from './components/WebGL.vue';
 import accessMIDI from './app/midi';
 
 @Options({
   components: {
     Controls,
     Settings,
+    WebGL,
   },
   async mounted() {
     await accessMIDI();
