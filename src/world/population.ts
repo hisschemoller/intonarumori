@@ -5,6 +5,8 @@ import createBox from './primitives/box';
 import BoxConfiguration from './primitives/BoxConfiguration';
 import createCylinder from './primitives/cylinder';
 import CylinderConfiguration from './primitives/CylinderConfiguration';
+import createSphere from './primitives/sphere';
+import SphereConfiguration from './primitives/SphereConfiguration';
 
 const meshes: Mesh[] = [];
 
@@ -27,5 +29,8 @@ export function populateWorld(scene: Scene, physicsWorld: Ammo.btDiscreteDynamic
   })));
   meshes.push(createBox(scene, physicsWorld, new BoxConfiguration({
     m: 0, w: 5, d: 5, h: 0.1, px: 0, py: -2,
+  })));
+  meshes.push(createSphere(scene, physicsWorld, new SphereConfiguration({
+    r: 0.6, px: -0.1, py: 6,
   })));
 }
