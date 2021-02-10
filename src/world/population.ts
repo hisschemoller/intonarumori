@@ -24,13 +24,52 @@ export function getPopulation(): Mesh[] {
  * @param {Object} physicsWorld Ammo world.
  */
 export function populateWorld(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld): void {
-  meshes.push(createCylinder(scene, physicsWorld, new CylinderConfiguration({
-    h: 0.1, r: 2.5, py: 2,
-  })));
-  meshes.push(createBox(scene, physicsWorld, new BoxConfiguration({
-    m: 0, w: 5, d: 5, h: 0.1, px: 0, py: -2,
-  })));
-  meshes.push(createSphere(scene, physicsWorld, new SphereConfiguration({
-    r: 0.6, px: -0.1, py: 6,
-  })));
+  const fixedBox = createBox(scene, physicsWorld, new BoxConfiguration({
+    w: 0.1, h: 0.1, d: 0.1, pz: -0.3, m: 0,
+  }));
+  meshes.push(fixedBox);
+
+  const box1 = createBox(scene, physicsWorld, new BoxConfiguration({
+    w: 1, h: 0.2, d: 0.2, px: 0.5, py: 0, m: 1,
+  }));
+  meshes.push(box1);
+
+  const box2 = createBox(scene, physicsWorld, new BoxConfiguration({
+    w: 1, h: 0.2, d: 0.2, px: 1, py: 1, m: 1,
+  }));
+  meshes.push(box2);
+
+  const hinge1 = new Ammo.btHingeConstraint(
+    fixedBox.userData.physicsBody,
+    box1.userData.physicsBody,
+    new Ammo.btVector3(0, 0, 0.3),
+    new Ammo.btVector3(-0.5, 0, 0),
+    new Ammo.btVector3(0, 0, 1),
+    new Ammo.btVector3(0, 0, 1),
+    false,
+  );
+  hinge1.enableAngularMotor(true, 3, 0.5);
+  physicsWorld.addConstraint(hinge1, true);
+
+  const hinge2 = new Ammo.btHingeConstraint(
+    box1.userData.physicsBody,
+    box2.userData.physicsBody,
+    new Ammo.btVector3(0.5, 0, 0),
+    new Ammo.btVector3(-0.5, 0, 0),
+    new Ammo.btVector3(0, 0, 1),
+    new Ammo.btVector3(0, 0, 1),
+    false,
+  );
+  physicsWorld.addConstraint(hinge2, true);
+
+  // FIRST TEST
+  // meshes.push(createCylinder(scene, physicsWorld, new CylinderConfiguration({
+  //   h: 0.1, r: 2.5, py: 2,
+  // })));
+  // meshes.push(createBox(scene, physicsWorld, new BoxConfiguration({
+  //   m: 0, w: 5, d: 5, h: 0.1, px: 0, py: -2,
+  // })));
+  // meshes.push(createSphere(scene, physicsWorld, new SphereConfiguration({
+  //   r: 0.6, px: -0.1, py: 6,
+  // })));
 }

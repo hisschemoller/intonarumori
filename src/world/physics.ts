@@ -23,7 +23,7 @@ function setupPhysicsWorld() {
   const solver = new Ammo.btSequentialImpulseConstraintSolver();
 
   // the world's gravity
-  const gravity = new Ammo.btVector3(0, -9.8, 0);
+  const gravity = new Ammo.btVector3(0, -9.82, 0);
 
   // the physics world
   physicsWorld = new Ammo.btDiscreteDynamicsWorld(
