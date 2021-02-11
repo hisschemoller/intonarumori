@@ -1,6 +1,11 @@
 <template>
   <div id="controls">
-    <button type="button" @click="toggleSettings(true)"><span class="icon-cog"></span></button>
+    <Button
+      type="button"
+      @click="toggleSettings(true)"
+      class="p-button-lg p-component p-button-icon-only p-button-rounded p-button-text">
+      <i class="pi pi-cog"></i>
+    </Button>
   </div>
 </template>
 
@@ -8,9 +13,13 @@
 
 import { defineComponent } from 'vue';
 import { mapMutations } from 'vuex';
+import Button from 'primevue/button';
 import { MutationType } from '../store/mutations';
 
 export default defineComponent({
+  components: {
+    Button,
+  },
   methods: {
     ...mapMutations({
       toggleSettings: MutationType.ToggleSettings,

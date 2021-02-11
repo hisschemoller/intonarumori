@@ -24,6 +24,7 @@ export function getPopulation(): Mesh[] {
  * @param {Object} physicsWorld Ammo world.
  */
 export function populateWorld(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld): void {
+  // HINGE CONSTRAINT AND MOTOR
   const fixedBox = createBox(scene, physicsWorld, new BoxConfiguration({
     w: 0.1, h: 0.1, d: 0.1, pz: -0.3, m: 0,
   }));
