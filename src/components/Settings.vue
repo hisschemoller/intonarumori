@@ -1,26 +1,26 @@
 <template>
-<Dialog header="App Settings" v-model:visible="isVisible">
-  <div class="p-text-left">App settings in this panel.</div>
-  <div class="section">
-    <div class="section-left">
-      <div class="section-header">Bluetooth</div>
-      <Button @click="connectBLE" class="p-button-lg" style="width: 100%;">Connect...</Button>
+<Dialog header="Intonarumori" v-model:visible="isVisible">
+  <div class="p-text-left">Intonarumori uses 3D and physics to generate sound. Use the settings
+    below to connect a MIDI controller via USB or Bluetooth.</div>
+  <div class="p-grid">
+    <div class="p-col-12 p-sm-6 p-d-flex p-flex-column">
+      <div class="subheader">Bluetooth</div>
+      <Button @click="connectBLE">Connect...</Button>
       <div class="status">{{ bluetoothMessage }}</div>
     </div>
-    <div class="section-right">
-      <div class="section-header">MIDI</div>
+    <div class="p-col-12 p-sm-6 p-d-flex p-flex-column">
+      <div class="subheader">MIDI</div>
       <Dropdown
         :options="midiInputNames"
         placeholder="No input selected..."
         v-model="midiSelectedInput"
-        style="width: 100%;"
       ></Dropdown>
       <div class="status">Status</div>
     </div>
-  </div>
-  <div class="section">
+    <div class="p-col-12 p-d-flex p-ai-center">
       <Button @click="reset" class="p-mr-2">Reset</Button>
       Clear all data and start fresh.
+    </div>
   </div>
   <template #footer>
     <Button label="Close" icon="pi pi-check" autofocus @click="isVisible = false" />
@@ -54,9 +54,6 @@ export default defineComponent({
     });
 
     // midi inputs
-    // const selectMIDIInput = (name: string) => {
-    //   store.commit(MutationType.SelectMIDIInput, name);
-    // };
     const midiInputNames = computed(() => store.state.midiInputs);
     const midiSelectedInput = computed({
       get: () => store.state.midiSelectedInput,
@@ -95,48 +92,26 @@ export default defineComponent({
 
 </script>
 
-<style scoped>
-/* #settings .dialog__window {
-  width: 500px;
-} */
-.section {
-  align-items: baseline;
-  /* border-top: 1px solid var(--color-darkest); */
-  display: flex;
-  flex-wrap: wrap;
-  margin: 10px 0 0 0;
-  padding-top: 10px;
-  width: 100%;
+<style>
+.p-dialog {
+  max-width: 500px;
 }
-.section-left {
-  flex-basis: 48%;
-  padding-right: 4%;
-  min-width: 200px;
+.p-grid .p-dropdown-panel .p-dropdown-items .p-dropdown-item,
+.p-dropdown .p-inputtext {
+  padding-bottom: 0.65rem;
+  padding-top: 0.65rem;
 }
-.section-right {
-  flex-basis: 48%;
-  min-width: 200px;
-}
-/* .settings__section-right select {
-  border: 1px solid var(--color-darkest);
-  border-radius: 0;
-  background-color: transparent;
-  font-size: 16px;
-  -moz-appearance: none;
-  padding: 8px 16px;
-} */
-.section-header {
-  font-weight: 700;
-  margin: 10px 0;
+.subheader {
+  font-weight: 500;
+  margin: 10px 0 10px 0;
 }
 .status {
   color: var(--color-mid);
   margin-top: 10px;
 }
-/* .settings__section .btn {
-  margin-right: 10px;
+@media screen and (min-width: 576px) {
+  .subheader {
+    margin-top: 20px;
+  }
 }
-.settings__btn_description {
-  margin-top: 10px;
-} */
 </style>
