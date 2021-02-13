@@ -1,7 +1,9 @@
 import { MutationTree } from 'vuex';
 import { State } from './state';
+import { MIDIMessage } from '../app/midi-types';
 
 export enum MutationType {
+  HandleMIDIMessage = 'HANDLE_MIDI_MESSAGE',
   Reset = 'RESET',
   SelectMIDIInput = 'SELECT_MIDI_INPUT',
   SetBluetoothStatus = 'SET_BLUETOOTH_STATUS',
@@ -10,6 +12,7 @@ export enum MutationType {
 }
 
 export type Mutations = {
+  [MutationType.HandleMIDIMessage](state: State, message: MIDIMessage): void;
   [MutationType.Reset](state: State): void;
   [MutationType.SelectMIDIInput](state: State, name: string): void;
   [MutationType.SetBluetoothStatus](state: State, status: number): void;
@@ -18,6 +21,9 @@ export type Mutations = {
 }
 
 export const mutations: MutationTree<State> & Mutations = {
+  [MutationType.HandleMIDIMessage](state, message) {
+    state.midiMessage = message;
+  },
   [MutationType.Reset](state) {
     state.midiSelectedInput = '';
   },

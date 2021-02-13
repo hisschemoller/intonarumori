@@ -1,22 +1,13 @@
 import { computed, watch } from 'vue';
+import { Store } from 'vuex';
+import { State } from '../store/state';
 import { useStore } from '../store';
 import { MutationType } from '../store/mutations';
+import { MIDIMessageType } from './midi-types';
 
 let midiAccess: WebMidi.MIDIAccess;
 let midiInput: WebMidi.MIDIInput;
-
-export enum MIDIMessages {
-  NOTE_OFF = 128, // 0x80
-  NOTE_ON = 144, // 0x90
-  POLY_KEY_PRESSURE = 160, // 0xA0
-  CONTROL_CHANGE = 176, // 0xB0
-  PROGRAM_CHANGE = 176, // 0xC0
-  SYSTEM_REALTIME = 240,
-  REALTIME_CLOCK = 248,
-  REALTIME_START = 250,
-  REALTIME_CONTINUE = 251,
-  REALTIME_STOP = 252,
-}
+let store: Store<State>;
 
 /**
  * Handler for all incoming MIDI messages.
@@ -25,14 +16,18 @@ export enum MIDIMessages {
 function onMIDIMessage(e: WebMidi.MIDIMessageEvent): void {
   // eslint-disable-next-line no-bitwise
   switch (e.data[0] & 0xf0) {
-    case MIDIMessages.SYSTEM_REALTIME:
+    case MIDIMessageType.SYSTEM_REALTIME:
       break;
-    case MIDIMessages.CONTROL_CHANGE:
-      console.log(e.data);
-      break;
-    case MIDIMessages.NOTE_ON:
-    case MIDIMessages.NOTE_OFF:
-      console.log(e.data);
+
+    case MIDIMessageType.CONTROL_CHANGE:
+    case MIDIMessageType.NOTE_ON:
+    case MIDIMessageType.NOTE_OFF:
+
+      store.commit(MutationType.HandleMIDIMessage, {
+        type: e.data[0],
+        data0: e.data[1],
+        data1: e.data[2],
+      });
       break;
 
     default:
@@ -67,7 +62,6 @@ function scanMIDIPorts() {
     }
   }
 
-  const store = useStore();
   store.commit(MutationType.UpdateMIDIPorts, inputNames);
 }
 
@@ -81,14 +75,14 @@ export default function accessMidi() {
         .then(
           (access: WebMidi.MIDIAccess) => {
             console.log('MIDI enabled.');
-            midiAccess = access;
-            midiAccess.onstatechange = scanMIDIPorts;
-            scanMIDIPorts();
-            const store = useStore();
+            store = useStore();
             const inputNameRef = computed(() => store.state.midiSelectedInput);
             watch(inputNameRef, () => {
               selectMIDIInput(store.state.midiSelectedInput);
             });
+            midiAccess = access;
+            midiAccess.onstatechange = scanMIDIPorts;
+            scanMIDIPorts();
             resolve(true);
           },
           () => {
