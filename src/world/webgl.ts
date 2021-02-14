@@ -14,7 +14,8 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { step } from './physics';
 import addWindowResizeCallback from '../utils/windowresize';
-import { populateWorld } from './population';
+import TestPopulation from './test-population';
+import PopulationInterface from './population-interface';
 
 let renderer: WebGLRenderer;
 let clock: Clock;
@@ -24,6 +25,7 @@ let scene: Scene;
 let camera: PerspectiveCamera;
 let orbitControls: OrbitControls;
 let canvasRect: DOMRect;
+let population: PopulationInterface;
 
 /**
  * Update the physics world and render the results in 3D.
@@ -31,6 +33,7 @@ let canvasRect: DOMRect;
 function draw() {
   const deltaTime = clock.getDelta();
   step(deltaTime);
+  population.update();
   renderer.render(scene, camera);
   requestAnimationFrame(draw);
 }
@@ -126,7 +129,7 @@ export default function setup(
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
 ): void {
   setupWebGLWorld(rootEl);
-  populateWorld(scene, physicsWorld);
+  population = new TestPopulation(scene, physicsWorld);
   addWindowResizeCallback(onWindowResize);
   onWindowResize();
   draw();

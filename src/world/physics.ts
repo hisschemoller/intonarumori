@@ -1,15 +1,12 @@
 /* eslint-disable new-cap */
 import Ammo from 'ammojs-typed';
-import { Mesh } from 'three';
 import { computed, watch } from 'vue';
 import { Store } from 'vuex';
 import { State } from '../store/state';
 import { useStore } from '../store';
-import { getPopulation } from './population';
 import { MIDIMessageType } from '../app/midi-types';
 
 let physicsWorld: Ammo.btDiscreteDynamicsWorld;
-let tmpTrans: Ammo.btTransform;
 let store: Store<State>;
 
 /**
@@ -53,7 +50,6 @@ function setupPhysicsWorld() {
     collisionConfiguration,
   );
   physicsWorld.setGravity(gravity);
-  tmpTrans = new Ammo.btTransform();
 }
 /**
  * Create the physics world.
@@ -77,16 +73,4 @@ export function setup(): Promise<Ammo.btDiscreteDynamicsWorld> {
  */
 export function step(deltaTime: number): void {
   physicsWorld.stepSimulation(deltaTime, 10);
-
-  getPopulation().forEach((mesh: Mesh) => {
-    const body = mesh.userData.physicsBody;
-    const motionState = body.getMotionState();
-    if (motionState) {
-      motionState.getWorldTransform(tmpTrans);
-      const p = tmpTrans.getOrigin();
-      const q = tmpTrans.getRotation();
-      mesh.position.set(p.x(), p.y(), p.z());
-      mesh.quaternion.set(q.x(), q.y(), q.z(), q.w());
-    }
-  });
 }
