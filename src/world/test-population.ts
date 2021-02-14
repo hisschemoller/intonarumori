@@ -1,14 +1,25 @@
 /* eslint-disable new-cap */
+import { computed, watch } from 'vue';
+import { Store } from 'vuex';
 import Ammo from 'ammojs-typed';
 import { Scene } from 'three';
+import { State } from '../store/state';
+import { useStore } from '../store';
+import { MIDIMessageType } from '../app/midi-types';
 import Population from './population';
 import createBox from './primitives/box';
 import BoxConfiguration from './primitives/BoxConfiguration';
 
 export default class TestPopulation extends Population {
+  private store: Store<State>;
+
+  private hinge1!: Ammo.btHingeConstraint;
+
   constructor(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
     super();
+    this.store = useStore();
     this.populate(scene, physicsWorld);
+    this.setupListener();
   }
 
   /**
@@ -33,7 +44,7 @@ export default class TestPopulation extends Population {
     }));
     this.meshes.push(box2);
 
-    const hinge1 = new Ammo.btHingeConstraint(
+    this.hinge1 = new Ammo.btHingeConstraint(
       fixedBox.userData.physicsBody,
       box1.userData.physicsBody,
       new Ammo.btVector3(0, 0, 0.3),
@@ -42,8 +53,8 @@ export default class TestPopulation extends Population {
       new Ammo.btVector3(0, 0, 1),
       false,
     );
-    hinge1.enableAngularMotor(true, 3, 0.5);
-    physicsWorld.addConstraint(hinge1, true);
+    this.hinge1.enableAngularMotor(true, 3, 0.5);
+    physicsWorld.addConstraint(this.hinge1, true);
 
     const hinge2 = new Ammo.btHingeConstraint(
       box1.userData.physicsBody,
@@ -55,5 +66,23 @@ export default class TestPopulation extends Population {
       false,
     );
     physicsWorld.addConstraint(hinge2, true);
+  }
+
+  /**
+   * Add listener to changes in the app state.
+   */
+  private setupListener() {
+    const midiMessageRef = computed(() => this.store.state.midiMessage);
+    watch(midiMessageRef, () => {
+      const { type, data0, data1 } = this.store.state.midiMessage;
+      if (type === MIDIMessageType.CONTROL_CHANGE && data0 === 117) {
+        this.updateMotor(data1 / 127);
+      }
+    });
+  }
+
+  private updateMotor(value: number): void {
+    const isEnabled = value > 0;
+    this.hinge1.enableAngularMotor(isEnabled, value * 6, 0.5);
   }
 }

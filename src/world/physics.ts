@@ -1,27 +1,7 @@
 /* eslint-disable new-cap */
 import Ammo from 'ammojs-typed';
-import { computed, watch } from 'vue';
-import { Store } from 'vuex';
-import { State } from '../store/state';
-import { useStore } from '../store';
-import { MIDIMessageType } from '../app/midi-types';
 
 let physicsWorld: Ammo.btDiscreteDynamicsWorld;
-let store: Store<State>;
-
-/**
- * Add listener to changes in the app state.
- */
-function setupListener() {
-  store = useStore();
-  const midiMessageRef = computed(() => store.state.midiMessage);
-  watch(midiMessageRef, () => {
-    const { type, data0, data1 } = store.state.midiMessage;
-    if (type === MIDIMessageType.CONTROL_CHANGE && data0 === 117) {
-      console.log(data1);
-    }
-  });
-}
 
 /**
  * Ammo physics world setup.
@@ -59,7 +39,6 @@ export function setup(): Promise<Ammo.btDiscreteDynamicsWorld> {
     Ammo(Ammo).then(() => {
       console.log('Ammo physics initialised.');
       setupPhysicsWorld();
-      setupListener();
       resolve(physicsWorld);
     }).catch((error) => {
       reject(error);
