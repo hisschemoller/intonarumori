@@ -1,8 +1,10 @@
 import Ammo from 'ammojs-typed';
 import {
+  AxesHelper,
   Clock,
   Color,
   DirectionalLight,
+  GridHelper,
   HemisphereLight,
   PCFShadowMap,
   PerspectiveCamera,
@@ -89,19 +91,21 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
   camera.lookAt(new Vector3(0, 0, 0));
   scene.add(camera);
 
+  // AMBIENT LIGHT
   // const ambientLight = new AmbientLight(0xffffff);
   // scene.add(ambientLight);
 
+  // HEMI LIGHT
   const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.1);
   hemiLight.color.setHSL(0.6, 0.6, 0.6);
   hemiLight.groundColor.setHSL(0.1, 1, 0.4);
   hemiLight.position.set(0, 50, 0);
   scene.add(hemiLight);
 
+  // DIRECTIONAL LIGHT
   const SHADOW_SIZE = 50;
   const SHADOW_FAR = 13500;
   const directionalLight = new DirectionalLight(0xffffff, 1);
-  // directionalLight.position.set(-0.5, 0.5, -1.5).normalize();
   directionalLight.position.set(-1, 1.75, 1);
   directionalLight.position.multiplyScalar(100);
   directionalLight.color.setHSL(0.1, 1, 0.95);
@@ -115,10 +119,20 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
   directionalLight.shadow.camera.far = SHADOW_FAR;
   scene.add(directionalLight);
 
+  // ORBIT
   orbitControls = new OrbitControls(camera, renderer.domElement);
   orbitControls.update();
   orbitControls.saveState();
   orbitControls.enabled = true;
+
+  // GRID
+  const grid = new GridHelper(5, 5);
+  grid.position.set(0, 0, 0);
+  scene.add(grid);
+
+  // AXES
+  const axesHelper = new AxesHelper(10);
+  scene.add(axesHelper);
 }
 
 /**

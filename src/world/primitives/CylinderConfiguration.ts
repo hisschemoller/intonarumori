@@ -11,7 +11,7 @@ export default class CylinderConfiguration extends PrimitiveConfiguration {
     this.radius = r;
   }
 
-  height = 1;
+  height: number;
 
-  radius = 1;
+  radius: number;
 }

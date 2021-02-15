@@ -10,5 +10,5 @@ export default class SphereConfiguration extends PrimitiveConfiguration {
     this.radius = r;
   }
 
-  radius = 1;
+  radius: number;
 }

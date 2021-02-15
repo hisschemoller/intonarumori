@@ -4,6 +4,7 @@ import {
   SphereBufferGeometry,
   Mesh,
   MeshPhongMaterial,
+  Object3D,
   Scene,
 } from 'three';
 import SphereConfiguration from './SphereConfiguration';
@@ -22,7 +23,7 @@ export default function createSphere(
   scene: Scene,
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
   config: SphereConfiguration,
-): Mesh {
+): Object3D {
   const {
     mass, position: pos, quaternion: quat, radius,
   } = config;

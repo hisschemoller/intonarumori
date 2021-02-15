@@ -4,11 +4,12 @@ import {
   BoxBufferGeometry,
   Mesh,
   MeshPhongMaterial,
+  Object3D,
   Scene,
 } from 'three';
 import BoxConfiguration from './BoxConfiguration';
 
-const COLOR = 0xff0505;
+const COLOR = 0xccddff;
 const MARGIN = 0.05;
 const RESTITUTION = 0.8;
 
@@ -21,15 +22,14 @@ export default function createBox(
   scene: Scene,
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
   config: BoxConfiguration,
-): Mesh {
+): Object3D {
   const {
     mass, position: pos, quaternion: quat, size,
   } = config;
 
-  // three.js section
-  console.log(size);
+  const geometry = new BoxBufferGeometry(size.w, size.h, size.d);
   const box = new Mesh(
-    new BoxBufferGeometry(size.w, size.h, size.d),
+    geometry,
     new MeshPhongMaterial({ color: COLOR }),
   );
   box.position.set(pos.x, pos.y, pos.z);

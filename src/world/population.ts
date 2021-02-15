@@ -1,9 +1,9 @@
 /* eslint-disable new-cap */
 import Ammo from 'ammojs-typed';
-import { Mesh } from 'three';
+import { Object3D } from 'three';
 
 export default class Population {
-  protected meshes: Mesh[] = [];
+  protected meshes: Object3D[] = [];
 
   private tmpTrans: Ammo.btTransform;
 
@@ -13,7 +13,7 @@ export default class Population {
 
   // eslint-disable-next-line class-methods-use-this
   update(): void {
-    this.meshes.forEach((mesh: Mesh) => {
+    this.meshes.forEach((mesh: Object3D) => {
       const body = mesh.userData.physicsBody;
       const motionState = body.getMotionState();
       if (motionState) {

@@ -9,7 +9,7 @@ export default class PrimitiveConfiguration {
     };
   }
 
-  mass = 1;
+  mass: number;
 
   position = {
     x: 0,
