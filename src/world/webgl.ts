@@ -106,7 +106,7 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
   const SHADOW_SIZE = 50;
   const SHADOW_FAR = 13500;
   const directionalLight = new DirectionalLight(0xffffff, 1);
-  directionalLight.position.set(-1, 1.75, 1);
+  directionalLight.position.set(1, 1.75, 1);
   directionalLight.position.multiplyScalar(100);
   directionalLight.color.setHSL(0.1, 1, 0.95);
   directionalLight.castShadow = true;

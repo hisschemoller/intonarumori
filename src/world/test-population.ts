@@ -34,45 +34,50 @@ export default class TestPopulation extends Population {
    * @param {Object} physicsWorld Ammo world.
    */
   private populate(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
+    const wall = createBox(scene, physicsWorld, new BoxConfiguration({
+      w: 0.1, h: 4, d: 5, px: -2, py: -2, m: 0,
+    }));
+    this.meshes.push(wall);
+
     const fixedBox = createBox(scene, physicsWorld, new BoxConfiguration({
       w: 0.1, h: 0.1, d: 0.1, pz: -0.3, m: 0,
     }));
     this.meshes.push(fixedBox);
 
-    // const cylinder1 = createCylinder(scene, physicsWorld, new CylinderConfiguration({
-    //   h: 1, r: 0.05, px: 0.5, py: 0, m: 1,
-    // }));
-    // this.meshes.push(cylinder1);
-    const box1 = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.1, h: 1, d: 0.1, py: -0.5,
+    const cylinder1 = createCylinder(scene, physicsWorld, new CylinderConfiguration({
+      h: 1, r: 0.05, px: 0.5, py: 0,
     }));
-    this.meshes.push(box1);
+    this.meshes.push(cylinder1);
+    // const box1 = createBox(scene, physicsWorld, new BoxConfiguration({
+    //   w: 0.1, h: 1, d: 0.1, py: -0.5,
+    // }));
+    // this.meshes.push(box1);
 
-    // const cylinder2 = createCylinder(scene, physicsWorld, new CylinderConfiguration({
-    //   h: 2, r: 0.05, py: 1,
-    // }));
-    // this.meshes.push(cylinder2);
-    const box2 = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.1, h: 2, d: 0.1, py: 0.5,
+    const cylinder2 = createCylinder(scene, physicsWorld, new CylinderConfiguration({
+      h: 2, r: 0.05, py: 0.5,
     }));
+    // this.meshes.push(cylinder2);
+    // const box2 = createBox(scene, physicsWorld, new BoxConfiguration({
+    //   w: 0.1, h: 2, d: 0.1, py: 0.5,
+    // }));
     // this.meshes.push(box2);
 
-    // const sphere = createSphere(scene, physicsWorld, new SphereConfiguration({
-    //   r: 0.2, py: 2,
-    // }));
-    // this.meshes.push(sphere);
-    const box3 = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.3, h: 0.3, d: 0.3, py: -0.5,
+    const sphere = createSphere(scene, physicsWorld, new SphereConfiguration({
+      r: 0.2, py: -0.5,
     }));
+    // this.meshes.push(sphere);
+    // const box3 = createBox(scene, physicsWorld, new BoxConfiguration({
+    //   w: 0.3, h: 0.3, d: 0.3, py: -0.5,
+    // }));
 
     const compound = createCompoundShape(scene, physicsWorld, new CompoundConfiguration(
-      {}, [box2, box3],
+      {}, [cylinder2, sphere],
     ));
     this.meshes.push(compound);
 
     this.hinge1 = new Ammo.btHingeConstraint(
       fixedBox.userData.physicsBody,
-      box1.userData.physicsBody,
+      cylinder1.userData.physicsBody,
       new Ammo.btVector3(0, 0, 0.3),
       new Ammo.btVector3(0, 0.5, 0),
       new Ammo.btVector3(0, 0, 1),
@@ -83,7 +88,7 @@ export default class TestPopulation extends Population {
     physicsWorld.addConstraint(this.hinge1, true);
 
     const hinge2 = new Ammo.btHingeConstraint(
-      box1.userData.physicsBody,
+      cylinder1.userData.physicsBody,
       compound.userData.physicsBody,
       new Ammo.btVector3(0, -0.5, 0), // pivot box1 local coords
       new Ammo.btVector3(0, 1.5, 0), // pivot compound
@@ -91,7 +96,9 @@ export default class TestPopulation extends Population {
       new Ammo.btVector3(0, 0, 1),
       false,
     );
+    // hinge2.setAngularOnly(true);
     physicsWorld.addConstraint(hinge2, true);
+    // console.log(hinge2.getPa;
   }
 
   /**

@@ -9,7 +9,7 @@ import {
 } from 'three';
 import BoxConfiguration from './BoxConfiguration';
 
-const COLOR = 0xccddff;
+const COLOR = 0x00ccff;
 const MARGIN = 0.05;
 const RESTITUTION = 0.8;
 

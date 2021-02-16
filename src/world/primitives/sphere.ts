@@ -9,7 +9,7 @@ import {
 } from 'three';
 import SphereConfiguration from './SphereConfiguration';
 
-const COLOR = 0xff0505;
+const COLOR = 0x00ccff;
 const MARGIN = 0.05;
 const SEGMENTS = 16;
 const RESTITUTION = 0.8;

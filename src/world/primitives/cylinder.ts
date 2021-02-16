@@ -4,11 +4,12 @@ import {
   CylinderBufferGeometry,
   Mesh,
   MeshPhongMaterial,
+  Object3D,
   Scene,
 } from 'three';
 import CylinderConfiguration from './CylinderConfiguration';
 
-const COLOR = 0xff0505;
+const COLOR = 0x00ccff;
 const MARGIN = 0.05;
 const RADIAL_SEGMENTS = 16;
 const RESTITUTION = 0.8;
@@ -22,14 +23,15 @@ export default function createCylinder(
   scene: Scene,
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
   config: CylinderConfiguration,
-): Mesh {
+): Object3D {
   const {
     height, mass, position: pos, quaternion: quat, radius,
   } = config;
 
   // three.js section
+  const geometry = new CylinderBufferGeometry(radius, radius, height, RADIAL_SEGMENTS);
   const cylinder = new Mesh(
-    new CylinderBufferGeometry(radius, radius, height, RADIAL_SEGMENTS),
+    geometry,
     new MeshPhongMaterial({ color: COLOR }),
   );
   cylinder.position.set(pos.x, pos.y, pos.z);
