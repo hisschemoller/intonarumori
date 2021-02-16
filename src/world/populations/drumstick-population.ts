@@ -3,20 +3,20 @@ import { computed, watch } from 'vue';
 import { Store } from 'vuex';
 import Ammo from 'ammojs-typed';
 import { Scene } from 'three';
-import { State } from '../store/state';
-import { useStore } from '../store';
-import { MIDIMessageType } from '../app/midi-types';
-import Population from './population';
-import createBox from './primitives/box';
-import BoxConfiguration from './primitives/BoxConfiguration';
-import createCompoundShape from './primitives/compound';
-import createCylinder from './primitives/cylinder';
-import CylinderConfiguration from './primitives/CylinderConfiguration';
-import createSphere from './primitives/sphere';
-import SphereConfiguration from './primitives/SphereConfiguration';
-import CompoundConfiguration from './primitives/CompoundConfiguration';
+import { State } from '../../store/state';
+import { useStore } from '../../store';
+import { MIDIMessageType } from '../../app/midi-types';
+import Population from '../population';
+import createBox from '../primitives/box';
+import BoxConfiguration from '../primitives/BoxConfiguration';
+import createCompoundShape from '../primitives/compound';
+import createCylinder from '../primitives/cylinder';
+import CylinderConfiguration from '../primitives/CylinderConfiguration';
+import createSphere from '../primitives/sphere';
+import SphereConfiguration from '../primitives/SphereConfiguration';
+import CompoundConfiguration from '../primitives/CompoundConfiguration';
 
-export default class TestPopulation extends Population {
+export default class DrumstickPopulation extends Population {
   private store: Store<State>;
 
   private hinge1!: Ammo.btHingeConstraint;
@@ -82,7 +82,7 @@ export default class TestPopulation extends Population {
       new Ammo.btVector3(0, 0.5, 0),
       new Ammo.btVector3(0, 0, 1),
       new Ammo.btVector3(0, 0, 1),
-      false,
+      true,
     );
     this.hinge1.enableAngularMotor(true, 3, 0.5);
     physicsWorld.addConstraint(this.hinge1, true);
@@ -94,7 +94,7 @@ export default class TestPopulation extends Population {
       new Ammo.btVector3(0, 1.5, 0), // pivot compound
       new Ammo.btVector3(0, 0, 1),
       new Ammo.btVector3(0, 0, 1),
-      false,
+      true,
     );
     // hinge2.setAngularOnly(true);
     physicsWorld.addConstraint(hinge2, true);

@@ -8,7 +8,6 @@ import {
   HemisphereLight,
   PCFShadowMap,
   PerspectiveCamera,
-  Raycaster,
   Scene,
   WebGLRenderer,
   Vector3,
@@ -16,13 +15,11 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { step } from './physics';
 import addWindowResizeCallback from '../utils/windowresize';
-import TestPopulation from './test-population';
+import DrumwheelPopulation from './populations/bumpwheel-population';
 import PopulationInterface from './population-interface';
 
 let renderer: WebGLRenderer;
 let clock: Clock;
-let raycaster: Raycaster;
-let intersection: Vector3;
 let scene: Scene;
 let camera: PerspectiveCamera;
 let orbitControls: OrbitControls;
@@ -71,7 +68,7 @@ function onWindowResize() {
  */
 function setupWebGLWorld(rootEl: HTMLDivElement) {
   renderer = new WebGLRenderer({ antialias: true });
-  renderer.setClearColor(0xbfd1e5);
+  renderer.setClearColor(0xbbddff);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = PCFShadowMap; // PCFSoftShadowMap
@@ -79,12 +76,8 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
 
   clock = new Clock();
 
-  raycaster = new Raycaster();
-
-  intersection = new Vector3();
-
   scene = new Scene();
-  scene.background = new Color(0xbfd1e5);
+  scene.background = new Color(0xbbddff);
 
   camera = new PerspectiveCamera(45, 1, 1, 500);
   camera.name = 'camera';
@@ -96,14 +89,14 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
   // scene.add(ambientLight);
 
   // HEMI LIGHT
-  const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.1);
+  const hemiLight = new HemisphereLight();
   hemiLight.color.setHSL(0.6, 0.6, 0.6);
   hemiLight.groundColor.setHSL(0.1, 1, 0.4);
   hemiLight.position.set(0, 50, 0);
   scene.add(hemiLight);
 
   // DIRECTIONAL LIGHT
-  const SHADOW_SIZE = 50;
+  const SHADOW_SIZE = 10;
   const SHADOW_FAR = 13500;
   const directionalLight = new DirectionalLight(0xffffff, 1);
   directionalLight.position.set(1, 1.75, 1);
@@ -126,7 +119,7 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
   orbitControls.enabled = true;
 
   // GRID
-  const grid = new GridHelper(5, 5);
+  const grid = new GridHelper(10, 10);
   grid.position.set(0, 0, 0);
   scene.add(grid);
 
@@ -143,7 +136,7 @@ export default function setup(
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
 ): void {
   setupWebGLWorld(rootEl);
-  population = new TestPopulation(scene, physicsWorld);
+  population = new DrumwheelPopulation(scene, physicsWorld);
   addWindowResizeCallback(onWindowResize);
   onWindowResize();
   draw();
