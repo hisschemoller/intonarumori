@@ -22,7 +22,7 @@ export default class DrumstickPopulation extends Population {
   private hinge1!: Ammo.btHingeConstraint;
 
   constructor(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
-    super();
+    super(physicsWorld);
     this.store = useStore();
     this.populate(scene, physicsWorld);
     this.setupListener();

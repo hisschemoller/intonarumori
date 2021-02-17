@@ -3,8 +3,9 @@ import { computed, watch } from 'vue';
 import { Store } from 'vuex';
 import Ammo from 'ammojs-typed';
 import { Euler, Quaternion, Scene } from 'three';
-import { State } from '../../store/state';
 import { useStore } from '../../store';
+import { State } from '../../store/state';
+import { MutationType } from '../../store/mutations';
 import { MIDIMessageType } from '../../app/midi-types';
 import Population from '../population';
 import createBox from '../primitives/box';
@@ -20,10 +21,36 @@ export default class DrumwheelPopulation extends Population {
   private hinge1!: Ammo.btHingeConstraint;
 
   constructor(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
-    super();
+    super(physicsWorld);
     this.store = useStore();
     this.populate(scene, physicsWorld);
     this.setupListener();
+  }
+
+  /**
+   * Add listener to changes in the app state.
+   */
+  private detectCollision(): void {
+    const dispatcher = this.physicsWorld.getDispatcher();
+    const numManifolds = dispatcher.getNumManifolds();
+    for (let i = 0; i < numManifolds; i += 1) {
+      const contactManifold = dispatcher.getManifoldByIndexInternal(i);
+      const numContacts = contactManifold.getNumContacts();
+      for (let j = 0; j < numContacts; j += 1) {
+        const contactPoint = contactManifold.getContactPoint(j);
+        const distance = contactPoint.getDistance();
+        if (distance <= 0) {
+          const impulse = contactPoint.getAppliedImpulse();
+          if (impulse > 0.1) {
+            this.store.commit(MutationType.PlaySound, {
+              type: MIDIMessageType.NOTE_ON,
+              data0: 60,
+              data1: Math.max(127, Math.floor(impulse * 127)),
+            });
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -89,8 +116,22 @@ export default class DrumwheelPopulation extends Population {
     watch(midiMessageRef, () => {
       const { type, data0, data1 } = this.store.state.midiMessage;
       if (type === MIDIMessageType.CONTROL_CHANGE && data0 === 117) {
-        // this.updateMotor(data1 / 127);
+        this.updateMotor(data1 / 127);
       }
     });
+  }
+
+  /**
+   * Update after each step.
+   */
+  update(): void {
+    super.update();
+    this.detectCollision();
+  }
+
+  private updateMotor(value: number): void {
+    console.log(value);
+    const isEnabled = value > 0;
+    this.hinge1.enableAngularMotor(isEnabled, value * 6, 0.5);
   }
 }

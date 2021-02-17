@@ -13,6 +13,7 @@ export enum MIDIMessageType {
 
 export type MIDIMessage = {
   type: MIDIMessageType;
+  channel: number;
   data0: number;
   data1: number;
 };

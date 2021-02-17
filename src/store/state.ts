@@ -5,21 +5,25 @@ export type State = {
   isSettingsVisible: boolean;
   midiInputs: string[];
   midiMessage: MIDIMessage;
-  midiMsgData1: number;
-  midiMsgType: number;
+  midiSoundMessage: MIDIMessage;
   midiSelectedInput: string;
 };
 
 export const state: State = {
   bluetoothStatus: 0,
-  isSettingsVisible: true,
+  isSettingsVisible: false,
   midiInputs: [],
   midiMessage: {
     type: 0,
+    channel: 0,
     data0: 0,
     data1: 0,
   },
-  midiMsgData1: 0,
-  midiMsgType: 0,
+  midiSoundMessage: {
+    type: 0,
+    channel: 0,
+    data0: 0,
+    data1: 0,
+  },
   midiSelectedInput: '',
 };

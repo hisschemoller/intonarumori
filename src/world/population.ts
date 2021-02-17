@@ -5,12 +5,18 @@ import { Object3D } from 'three';
 export default class Population {
   protected meshes: Object3D[] = [];
 
+  protected physicsWorld: Ammo.btDiscreteDynamicsWorld;
+
   private tmpTrans: Ammo.btTransform;
 
-  constructor() {
+  constructor(physicsWorld: Ammo.btDiscreteDynamicsWorld) {
+    this.physicsWorld = physicsWorld;
     this.tmpTrans = new Ammo.btTransform();
   }
 
+  /**
+   * Update after each step.
+   */
   // eslint-disable-next-line class-methods-use-this
   update(): void {
     this.meshes.forEach((mesh: Object3D) => {
