@@ -9,7 +9,6 @@ import {
 } from 'three';
 import BoxConfiguration from './BoxConfiguration';
 
-const COLOR = 0x00ccff;
 const MARGIN = 0.05;
 const RESTITUTION = 0.8;
 
@@ -24,13 +23,13 @@ export default function createBox(
   config: BoxConfiguration,
 ): Object3D {
   const {
-    mass, position: pos, quaternion: quat, size,
+    color, mass, position: pos, quaternion: quat, size,
   } = config;
 
   const geometry = new BoxBufferGeometry(size.w, size.h, size.d);
   const box = new Mesh(
     geometry,
-    new MeshPhongMaterial({ color: COLOR }),
+    new MeshPhongMaterial({ color }),
   );
   box.position.set(pos.x, pos.y, pos.z);
   box.castShadow = true;

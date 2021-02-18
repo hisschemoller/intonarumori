@@ -18,8 +18,8 @@ const audioFileNames = [
   'reyongmid1.wav',
   'reyongmid2.wav',
   'reyongmid3.wav',
-  'reyongmid4.wav',
   'reyongmid5.wav',
+  'reyongmid6.wav',
   // '98715__marini24__ball-2.aiff',
   // '98718__marini24__ball-3.aiff',
   // '98719__marini24__ball-4.aiff',
@@ -73,7 +73,6 @@ function playSound(midiMessage: MIDIMessage): void {
     voiceIndex = (voiceIndex + 1) % numVoices;
 
     if (voice.isPlaying && voice.source) {
-      console.log('isPlaying');
       voice.source.stop();
     }
 
@@ -81,7 +80,7 @@ function playSound(midiMessage: MIDIMessage): void {
     voice.gain.gain.setValueAtTime(midiMessage.data1 / 127, startTime);
     voice.source = audioCtx.createBufferSource();
     voice.source.buffer = buffers[bufferIndex];
-    voice.source.playbackRate.setValueAtTime(2 ** ((midiMessage.data0 - 60) / 12), startTime);
+    // voice.source.playbackRate.setValueAtTime(2 ** ((midiMessage.data0 - 60) / 12), startTime);
     voice.source.connect(voice.gain);
     voice.source.start(startTime);
     voice.source.onended = () => {

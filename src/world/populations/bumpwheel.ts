@@ -40,17 +40,19 @@ export default class Bumpwheel {
   private create(
     scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld, positionZ: number,
   ): void {
+    // eslint-disable-next-line no-bitwise
+    const color = 0x224400 + ((this.index * 10) << 8);
     const fix = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.1, h: 0.1, d: 0.1, pz: positionZ - 0.3, m: 0,
+      w: 0.1, h: 0.1, d: 0.1, pz: positionZ - 0.3, m: 0, c: color,
     }));
     this.meshes.push(fix);
 
     const cylinder1 = createCylinder(scene, physicsWorld, new CylinderConfiguration({
-      h: 0.8, r: 1.5, m: 10,
+      h: 0.8, r: 1.5, m: 10, c: color,
     }));
 
     const bump1 = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 1, h: 0.15, d: 1, pz: 1.5,
+      w: 1, h: 0.15, d: 1, pz: 1.5, c: color,
     }));
 
     const compound = createCompoundShape(scene, physicsWorld, new CompoundConfiguration(
@@ -58,7 +60,7 @@ export default class Bumpwheel {
     ));
     this.meshes.push(compound);
     this.wheel = compound.userData.physicsBody;
-    this.wheel.setDamping(0.95, 0.95);
+    this.wheel.setDamping(0.99, 0.99);
     this.wheel.setUserIndex(this.index + 100);
 
     const hinge1 = new Ammo.btHingeConstraint(
@@ -74,7 +76,7 @@ export default class Bumpwheel {
     physicsWorld.addConstraint(hinge1, true);
 
     const stick = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.3, h: 2, d: 0.3, m: 0.3,
+      w: 0.3, h: 2, d: 0.3, m: 0.3, c: color,
     }));
     this.meshes.push(stick);
 
@@ -106,7 +108,11 @@ export default class Bumpwheel {
     watch(midiMessageRef, () => {
       const { type, data0, data1 } = this.store.state.midiMessage;
       if (type === MIDIMessageType.CONTROL_CHANGE && data0 === MIDI_CCS[this.index]) {
-        this.torque.setZ(-3 + ((data1 / 127) * -7));
+        if (data1 > 0) {
+          this.torque.setZ(-3 + ((data1 / 127) * -20));
+        } else {
+          this.torque.setZ(0);
+        }
       }
     });
   }

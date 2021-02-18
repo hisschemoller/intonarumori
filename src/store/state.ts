@@ -11,7 +11,7 @@ export type State = {
 
 export const state: State = {
   bluetoothStatus: 0,
-  isSettingsVisible: false,
+  isSettingsVisible: true,
   midiInputs: [],
   midiMessage: {
     type: 0,

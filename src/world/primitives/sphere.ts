@@ -9,7 +9,6 @@ import {
 } from 'three';
 import SphereConfiguration from './SphereConfiguration';
 
-const COLOR = 0x00ccff;
 const MARGIN = 0.05;
 const SEGMENTS = 16;
 const RESTITUTION = 0.8;
@@ -25,13 +24,13 @@ export default function createSphere(
   config: SphereConfiguration,
 ): Object3D {
   const {
-    mass, position: pos, quaternion: quat, radius,
+    color, mass, position: pos, quaternion: quat, radius,
   } = config;
 
   // three.js section
   const sphere = new Mesh(
     new SphereBufferGeometry(radius, SEGMENTS, SEGMENTS),
-    new MeshPhongMaterial({ color: COLOR }),
+    new MeshPhongMaterial({ color }),
   );
   sphere.position.set(pos.x, pos.y, pos.z);
   sphere.castShadow = true;
