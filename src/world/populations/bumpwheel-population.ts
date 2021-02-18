@@ -18,7 +18,9 @@ import CompoundConfiguration from '../primitives/CompoundConfiguration';
 export default class DrumwheelPopulation extends Population {
   private store: Store<State>;
 
-  private hinge1!: Ammo.btHingeConstraint;
+  private wheel!: Ammo.btRigidBody;
+
+  private torque = new Ammo.btVector3(0, 0, -4);
 
   constructor(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
     super(physicsWorld);
@@ -44,6 +46,7 @@ export default class DrumwheelPopulation extends Population {
           if (impulse > 0.1) {
             this.store.commit(MutationType.PlaySound, {
               type: MIDIMessageType.NOTE_ON,
+              channel: 1,
               data0: 60,
               data1: Math.max(127, Math.floor(impulse * 127)),
             });
@@ -65,7 +68,7 @@ export default class DrumwheelPopulation extends Population {
     this.meshes.push(fix);
 
     const cylinder1 = createCylinder(scene, physicsWorld, new CylinderConfiguration({
-      h: 0.8, r: 1.5,
+      h: 0.8, r: 1.5, m: 10,
     }));
 
     const q = new Quaternion().setFromEuler(new Euler(0, 0, 0));
@@ -77,8 +80,11 @@ export default class DrumwheelPopulation extends Population {
       {}, [cylinder1, bump1],
     ));
     this.meshes.push(compound);
+    this.wheel = compound.userData.physicsBody;
+    this.wheel.applyTorque(new Ammo.btVector3(1, 1, 1));
+    this.wheel.setDamping(0.95, 0.95);
 
-    this.hinge1 = new Ammo.btHingeConstraint(
+    const hinge1 = new Ammo.btHingeConstraint(
       fix.userData.physicsBody,
       compound.userData.physicsBody,
       new Ammo.btVector3(0, 0, 0.3),
@@ -87,11 +93,11 @@ export default class DrumwheelPopulation extends Population {
       new Ammo.btVector3(0, 1, 0),
       true,
     );
-    this.hinge1.enableAngularMotor(true, -1.5, 0.5);
-    physicsWorld.addConstraint(this.hinge1, true);
+    // hinge1.enableAngularMotor(true, -1.5, 3);
+    physicsWorld.addConstraint(hinge1, true);
 
     const stick = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.3, h: 2, d: 0.3, m: 0.5,
+      w: 0.3, h: 2, d: 0.3, m: 0.3,
     }));
     this.meshes.push(stick);
 
@@ -116,7 +122,7 @@ export default class DrumwheelPopulation extends Population {
     watch(midiMessageRef, () => {
       const { type, data0, data1 } = this.store.state.midiMessage;
       if (type === MIDIMessageType.CONTROL_CHANGE && data0 === 117) {
-        this.updateMotor(data1 / 127);
+        this.torque.setZ(-3 + ((data1 / 127) * -7));
       }
     });
   }
@@ -127,11 +133,6 @@ export default class DrumwheelPopulation extends Population {
   update(): void {
     super.update();
     this.detectCollision();
-  }
-
-  private updateMotor(value: number): void {
-    console.log(value);
-    const isEnabled = value > 0;
-    this.hinge1.enableAngularMotor(isEnabled, value * 6, 0.5);
+    this.wheel.applyTorque(this.torque);
   }
 }
