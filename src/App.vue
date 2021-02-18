@@ -10,6 +10,7 @@ import Controls from './components/Controls.vue';
 import Settings from './components/Settings.vue';
 import WebGL from './components/WebGL.vue';
 import accessMIDI from './app/midi';
+import { setup as setupAudio } from './app/audio';
 
 @Options({
   components: {
@@ -19,6 +20,7 @@ import accessMIDI from './app/midi';
   },
   async mounted() {
     await accessMIDI();
+    setupAudio();
   },
 })
 export default class App extends Vue {}
