@@ -21,7 +21,7 @@ export default class Bumpwheel {
 
   private wheel!: Ammo.btRigidBody;
 
-  private torque = new Ammo.btVector3(0, 0, -4);
+  private torque = new Ammo.btVector3(0, 0, -4 - (Math.random() * 0.1));
 
   private index: number;
 
