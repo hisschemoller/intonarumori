@@ -56,9 +56,13 @@ function loadAudioFiles() {
     fetch(`audio/${audioFileName}`).then((response) => {
       if (response.status === 200) {
         response.arrayBuffer().then((arrayBuffer) => {
-          audioCtx.decodeAudioData(arrayBuffer).then((audioBuffer) => {
-            buffers[index] = audioBuffer;
-          });
+          audioCtx.decodeAudioData(arrayBuffer,
+            (audioBuffer) => {
+              buffers[index] = audioBuffer;
+            },
+            (err) => {
+              console.error(err);
+            });
         });
       }
     });

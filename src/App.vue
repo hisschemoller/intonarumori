@@ -19,8 +19,13 @@ import { setup as setupAudio } from './app/audio';
     WebGL,
   },
   async mounted() {
-    await accessMIDI();
-    setupAudio();
+    try {
+      await accessMIDI();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setupAudio();
+    }
   },
 })
 export default class App extends Vue {}
