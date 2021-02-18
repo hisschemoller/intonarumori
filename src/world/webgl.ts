@@ -15,7 +15,7 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { step } from './physics';
 import addWindowResizeCallback from '../utils/windowresize';
-import DrumwheelPopulation from './populations/bumpwheel-population';
+import BumpwheelPopulation from './populations/bumpwheels-population';
 import PopulationInterface from './population-interface';
 
 let renderer: WebGLRenderer;
@@ -136,7 +136,7 @@ export default function setup(
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
 ): void {
   setupWebGLWorld(rootEl);
-  population = new DrumwheelPopulation(scene, physicsWorld);
+  population = new BumpwheelPopulation(scene, physicsWorld);
   addWindowResizeCallback(onWindowResize);
   onWindowResize();
   draw();

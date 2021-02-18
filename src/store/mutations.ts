@@ -1,6 +1,7 @@
 import { MutationTree } from 'vuex';
 import { State } from './state';
-import { MIDIMessage } from '../app/midi-types';
+import { MIDIMessage, MIDIMessageType } from '../app/midi-types';
+import { MIDI_CCS, MIDI_PITCHES } from '../app/config';
 
 export enum MutationType {
   HandleMIDIMessage = 'HANDLE_MIDI_MESSAGE',
@@ -24,7 +25,11 @@ export type Mutations = {
 
 export const mutations: MutationTree<State> & Mutations = {
   [MutationType.HandleMIDIMessage](state, message) {
-    state.midiMessage = message;
+    if ((message.type === MIDIMessageType.NOTE_ON && MIDI_PITCHES.includes(message.data0))
+      || (message.type === MIDIMessageType.CONTROL_CHANGE && MIDI_CCS.includes(message.data0))
+    ) {
+      state.midiMessage = message;
+    }
   },
   [MutationType.PlaySound](state, message) {
     state.midiSoundMessage = message;

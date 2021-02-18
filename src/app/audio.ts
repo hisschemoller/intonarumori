@@ -12,8 +12,22 @@ type Voice = {
 
 const numVoices = 32;
 const audioFileNames = [
-  '475901__mattiagiovanetti__metronome.wav',
-  '367059__electronicmotion__kick-long-tr-8.wav',
+  '24611__anamorphosis__gmb-ceng-ceng.wav',
+  'kemong.wav',
+  'kempli.wav',
+  'reyongmid1.wav',
+  'reyongmid2.wav',
+  'reyongmid3.wav',
+  'reyongmid4.wav',
+  'reyongmid5.wav',
+  // '98715__marini24__ball-2.aiff',
+  // '98718__marini24__ball-3.aiff',
+  // '98719__marini24__ball-4.aiff',
+  // '98720__marini24__ball-5.aiff',
+  // '98721__marini24__ball-6.aiff',
+  // '98722__marini24__ball-7.aiff',
+  // '98723__marini24__ball-8.aiff',
+  // '98724__marini24__ball-9.aiff',
 ];
 const buffers: AudioBuffer[] = [];
 const voices: Voice[] = [];
@@ -53,7 +67,7 @@ function loadAudioFiles() {
 
 function playSound(midiMessage: MIDIMessage): void {
   if (audioCtx && buffers[0]) {
-    const bufferIndex = 1;
+    const bufferIndex = midiMessage.data0 - 60;
     const startTime = audioCtx.currentTime;
     const voice = voices[voiceIndex];
     voiceIndex = (voiceIndex + 1) % numVoices;

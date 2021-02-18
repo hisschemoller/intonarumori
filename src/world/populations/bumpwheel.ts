@@ -1,69 +1,47 @@
 /* eslint-disable new-cap */
 import { computed, watch } from 'vue';
 import { Store } from 'vuex';
+import { Object3D, Scene } from 'three';
 import Ammo from 'ammojs-typed';
-import { Euler, Quaternion, Scene } from 'three';
 import { useStore } from '../../store';
 import { State } from '../../store/state';
-import { MutationType } from '../../store/mutations';
-import { MIDIMessageType } from '../../app/midi-types';
-import Population from '../population';
 import createBox from '../primitives/box';
 import BoxConfiguration from '../primitives/BoxConfiguration';
 import createCompoundShape from '../primitives/compound';
 import createCylinder from '../primitives/cylinder';
 import CylinderConfiguration from '../primitives/CylinderConfiguration';
 import CompoundConfiguration from '../primitives/CompoundConfiguration';
+import { MIDIMessageType } from '../../app/midi-types';
+import { MIDI_CCS } from '../../app/config';
 
-export default class DrumwheelPopulation extends Population {
+export default class Bumpwheel {
   private store: Store<State>;
+
+  private meshes: Object3D[] = [];
 
   private wheel!: Ammo.btRigidBody;
 
   private torque = new Ammo.btVector3(0, 0, -4);
 
-  constructor(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
-    super(physicsWorld);
+  private index: number;
+
+  constructor(
+    scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld, index: number, positionZ: number,
+  ) {
     this.store = useStore();
-    this.populate(scene, physicsWorld);
+    this.index = index;
+    this.create(scene, physicsWorld, positionZ);
     this.setupListener();
   }
 
   /**
-   * Add listener to changes in the app state.
-   */
-  private detectCollision(): void {
-    const dispatcher = this.physicsWorld.getDispatcher();
-    const numManifolds = dispatcher.getNumManifolds();
-    for (let i = 0; i < numManifolds; i += 1) {
-      const contactManifold = dispatcher.getManifoldByIndexInternal(i);
-      const numContacts = contactManifold.getNumContacts();
-      for (let j = 0; j < numContacts; j += 1) {
-        const contactPoint = contactManifold.getContactPoint(j);
-        const distance = contactPoint.getDistance();
-        if (distance <= 0) {
-          const impulse = contactPoint.getAppliedImpulse();
-          if (impulse > 0.1) {
-            this.store.commit(MutationType.PlaySound, {
-              type: MIDIMessageType.NOTE_ON,
-              channel: 1,
-              data0: 60,
-              data1: Math.max(127, Math.floor(impulse * 127)),
-            });
-          }
-        }
-      }
-    }
-  }
-
-  /**
    * Create the physics and 3D world population.
-   * @param {Object} scene 3D scene.
-   * @param {Object} physicsWorld Ammo world.
    */
-  private populate(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
+  private create(
+    scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld, positionZ: number,
+  ): void {
     const fix = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.1, h: 0.1, d: 0.1, pz: -0.3, m: 0,
+      w: 0.1, h: 0.1, d: 0.1, pz: positionZ - 0.3, m: 0,
     }));
     this.meshes.push(fix);
 
@@ -71,18 +49,17 @@ export default class DrumwheelPopulation extends Population {
       h: 0.8, r: 1.5, m: 10,
     }));
 
-    const q = new Quaternion().setFromEuler(new Euler(0, 0, 0));
     const bump1 = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 1, h: 0.15, d: 1, pz: 1.5, qx: q.x, qy: q.y, qz: q.z, qw: q.w,
+      w: 1, h: 0.15, d: 1, pz: 1.5,
     }));
 
     const compound = createCompoundShape(scene, physicsWorld, new CompoundConfiguration(
-      {}, [cylinder1, bump1],
+      { pz: positionZ }, [cylinder1, bump1],
     ));
     this.meshes.push(compound);
     this.wheel = compound.userData.physicsBody;
-    this.wheel.applyTorque(new Ammo.btVector3(1, 1, 1));
     this.wheel.setDamping(0.95, 0.95);
+    this.wheel.setUserIndex(this.index + 100);
 
     const hinge1 = new Ammo.btHingeConstraint(
       fix.userData.physicsBody,
@@ -115,13 +92,20 @@ export default class DrumwheelPopulation extends Population {
   }
 
   /**
+   * Provide 3D objects.
+   */
+  public getMeshes(): Object3D[] {
+    return this.meshes;
+  }
+
+  /**
    * Add listener to changes in the app state.
    */
   private setupListener() {
     const midiMessageRef = computed(() => this.store.state.midiMessage);
     watch(midiMessageRef, () => {
       const { type, data0, data1 } = this.store.state.midiMessage;
-      if (type === MIDIMessageType.CONTROL_CHANGE && data0 === 117) {
+      if (type === MIDIMessageType.CONTROL_CHANGE && data0 === MIDI_CCS[this.index]) {
         this.torque.setZ(-3 + ((data1 / 127) * -7));
       }
     });
@@ -131,8 +115,6 @@ export default class DrumwheelPopulation extends Population {
    * Update after each step.
    */
   update(): void {
-    super.update();
-    this.detectCollision();
     this.wheel.applyTorque(this.torque);
   }
 }
