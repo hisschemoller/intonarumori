@@ -2,6 +2,7 @@ import { MIDIMessage } from '../app/midi-types';
 
 export type State = {
   bluetoothStatus: number;
+  isControlsVisible: boolean;
   isSettingsVisible: boolean;
   midiInputs: string[];
   midiMessage: MIDIMessage;
@@ -11,6 +12,7 @@ export type State = {
 
 export const state: State = {
   bluetoothStatus: 0,
+  isControlsVisible: false,
   isSettingsVisible: true,
   midiInputs: [],
   midiMessage: {

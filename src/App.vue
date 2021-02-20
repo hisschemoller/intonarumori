@@ -1,12 +1,14 @@
 <template>
   <WebGL />
   <Controls />
+  <Navigation />
   <Settings />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Controls from './components/Controls.vue';
+import Navigation from './components/Navigation.vue';
 import Settings from './components/Settings.vue';
 import WebGL from './components/WebGL.vue';
 import accessMIDI from './app/midi';
@@ -16,6 +18,7 @@ import { setup as setupAudio } from './app/audio';
   components: {
     Controls,
     Settings,
+    Navigation,
     WebGL,
   },
   async mounted() {
@@ -32,17 +35,6 @@ export default class App extends Vue {}
 </script>
 
 <style>
-:root {
-  --color-lightest: #fff;
-  --color-lighter: #eee;
-  --color-light: #ccc;
-  --color-midlight: #aaa;
-  --color-mid: #999;
-  --color-middark: #666;
-  --color-dark: #333;
-  --color-darker: #111;
-  --color-darkest: #000;
-}
 body {
   margin: 0;
 }

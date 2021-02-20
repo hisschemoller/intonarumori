@@ -18,3 +18,12 @@ export default defineComponent({
 });
 
 </script>
+
+<style scoped>
+.canvas-container {
+  right: 0;
+  position: absolute;
+  top: 0;
+  z-index: -1;
+}
+</style>
