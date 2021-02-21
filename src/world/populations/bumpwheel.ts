@@ -13,8 +13,6 @@ import createCompoundShape from '../primitives/compound';
 import createCylinder from '../primitives/cylinder';
 import CylinderConfiguration from '../primitives/CylinderConfiguration';
 import CompoundConfiguration from '../primitives/CompoundConfiguration';
-import { MIDIMessageType } from '../../app/midi-types';
-import { MIDI_CCS } from '../../app/config';
 
 export default class Bumpwheel {
   private store: Store<State>;

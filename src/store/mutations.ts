@@ -1,7 +1,6 @@
 import { MutationTree } from 'vuex';
 import { State } from './state';
 import { MIDIMessage, MIDIMessageType } from '../app/midi-types';
-import { MIDI_CCS, MIDI_PITCHES } from '../app/config';
 
 export enum MutationType {
   HandleMIDIMessage = 'HANDLE_MIDI_MESSAGE',
@@ -30,7 +29,6 @@ export type Mutations = {
 export const mutations: MutationTree<State> & Mutations = {
   [MutationType.HandleMIDIMessage](state, message) {
     const { type, data0, data1 } = message;
-    // if ((message.type === MIDIMessageType.NOTE_ON && MIDI_PITCHES.includes(message.data0))) {}
     if (type === MIDIMessageType.CONTROL_CHANGE
       && state.wheels.allIds.includes(data0.toString())) {
       state.wheels.byId[data0.toString()].torqueControl = data1;

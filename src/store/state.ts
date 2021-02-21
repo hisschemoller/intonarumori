@@ -21,7 +21,7 @@ export const state: State = {
   bluetoothStatus: 0,
   isControlsVisible: false,
   isSettingsVisible: true,
-  midiControllers: [4, 5, 6, 7, 117, 118, 119, 3],
+  midiControllers: [1, 2, 3, 4, 5, 6, 7, 8],
   midiInputs: [],
   midiSoundMessage: {
     type: 0,
