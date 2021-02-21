@@ -7,6 +7,8 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { mapMutations } from 'vuex';
+import { MutationType } from './store/mutations';
 import Controls from './components/Controls.vue';
 import Navigation from './components/Navigation.vue';
 import Settings from './components/Settings.vue';
@@ -20,6 +22,14 @@ import { setup as setupAudio } from './app/audio';
     Settings,
     Navigation,
     WebGL,
+  },
+  methods: {
+    ...mapMutations({
+      initialise: MutationType.Initialise,
+    }),
+  },
+  created() {
+    this.initialise();
   },
   async mounted() {
     try {

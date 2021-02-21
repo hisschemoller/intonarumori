@@ -1,7 +1,9 @@
 /* eslint-disable new-cap */
 import { computed, watch } from 'vue';
 import { Store } from 'vuex';
-import { Object3D, Scene } from 'three';
+import {
+  Euler, Object3D, Quaternion, Scene,
+} from 'three';
 import Ammo from 'ammojs-typed';
 import { useStore } from '../../store';
 import { State } from '../../store/state';
@@ -25,11 +27,18 @@ export default class Bumpwheel {
 
   private index: number;
 
+  private control: string;
+
   constructor(
-    scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld, index: number, positionZ: number,
+    scene: Scene,
+    physicsWorld: Ammo.btDiscreteDynamicsWorld,
+    index: number,
+    control: string,
+    positionZ: number,
   ) {
     this.store = useStore();
     this.index = index;
+    this.control = control;
     this.create(scene, physicsWorld, positionZ);
     this.setupListener();
   }
@@ -75,8 +84,9 @@ export default class Bumpwheel {
     // hinge1.enableAngularMotor(true, -1.5, 3);
     physicsWorld.addConstraint(hinge1, true);
 
+    const q = new Quaternion().setFromEuler(new Euler(0, 0, Math.PI * -0.25));
     const stick = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.3, h: 2, d: 0.3, m: 0.3, c: color,
+      w: 0.3, h: 2, d: 0.3, m: 0.3, c: color, qx: q.x, qy: q.y, qz: q.z, qw: q.w,
     }));
     this.meshes.push(stick);
 
@@ -104,15 +114,14 @@ export default class Bumpwheel {
    * Add listener to changes in the app state.
    */
   private setupListener() {
-    const midiMessageRef = computed(() => this.store.state.midiMessage);
-    watch(midiMessageRef, () => {
-      const { type, data0, data1 } = this.store.state.midiMessage;
-      if (type === MIDIMessageType.CONTROL_CHANGE && data0 === MIDI_CCS[this.index]) {
-        if (data1 > 0) {
-          this.torque.setZ(-3 + ((data1 / 127) * -20));
-        } else {
-          this.torque.setZ(0);
-        }
+    const torqueControlRef = computed(
+      () => this.store.state.wheels.byId[this.control].torqueControl,
+    );
+    watch(torqueControlRef, () => {
+      if (torqueControlRef.value > 0) {
+        this.torque.setZ(-3 + ((torqueControlRef.value / 127) * -20));
+      } else {
+        this.torque.setZ(0);
       }
     });
   }

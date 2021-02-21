@@ -5,6 +5,7 @@ import { MIDI_CCS, MIDI_PITCHES } from '../app/config';
 
 export enum MutationType {
   HandleMIDIMessage = 'HANDLE_MIDI_MESSAGE',
+  Initialise = 'INITIALISE',
   PlaySound = 'PLAY_SOUND',
   Reset = 'RESET',
   SelectMIDIInput = 'SELECT_MIDI_INPUT',
@@ -16,6 +17,7 @@ export enum MutationType {
 
 export type Mutations = {
   [MutationType.HandleMIDIMessage](state: State, message: MIDIMessage): void;
+  [MutationType.Initialise](state: State): void;
   [MutationType.PlaySound](state: State, message: MIDIMessage): void;
   [MutationType.Reset](state: State): void;
   [MutationType.SelectMIDIInput](state: State, name: string): void;
@@ -27,11 +29,21 @@ export type Mutations = {
 
 export const mutations: MutationTree<State> & Mutations = {
   [MutationType.HandleMIDIMessage](state, message) {
-    if ((message.type === MIDIMessageType.NOTE_ON && MIDI_PITCHES.includes(message.data0))
-      || (message.type === MIDIMessageType.CONTROL_CHANGE && MIDI_CCS.includes(message.data0))
-    ) {
-      state.midiMessage = message;
+    const { type, data0, data1 } = message;
+    // if ((message.type === MIDIMessageType.NOTE_ON && MIDI_PITCHES.includes(message.data0))) {}
+    if (type === MIDIMessageType.CONTROL_CHANGE
+      && state.wheels.allIds.includes(data0.toString())) {
+      state.wheels.byId[data0.toString()].torqueControl = data1;
     }
+  },
+  [MutationType.Initialise](state) {
+    state.wheels.allIds = state.midiControllers.map((value) => value.toString());
+    state.wheels.byId = state.midiControllers.reduce((accumulator, value) => ({
+      ...accumulator,
+      [value.toString()]: {
+        torqueControl: 0,
+      },
+    }), {});
   },
   [MutationType.PlaySound](state, message) {
     state.midiSoundMessage = message;
