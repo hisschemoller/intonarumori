@@ -5,8 +5,9 @@ import { State } from '../store/state';
 import { MIDIMessage } from './midi-types';
 
 type Voice = {
-  gain: GainNode;
   isPlaying: boolean;
+  gain: GainNode;
+  panner: StereoPannerNode;
   source?: AudioBufferSourceNode;
 };
 
@@ -41,12 +42,14 @@ let audioCtx: AudioContext;
  */
 function createVoices() {
   while (voices.length < numVoices) {
+    const panner = audioCtx.createStereoPanner();
     const gain = audioCtx.createGain();
-    gain.connect(audioCtx.destination);
+    gain.connect(panner).connect(audioCtx.destination);
 
     voices.push({
       isPlaying: false,
       gain,
+      panner,
     });
   }
 }
@@ -71,7 +74,7 @@ function loadAudioFiles() {
 
 function playSound(midiMessage: MIDIMessage): void {
   if (audioCtx && buffers[0]) {
-    const bufferIndex = midiMessage.data0 - 60;
+    const index = midiMessage.data0 - 60;
     const startTime = audioCtx.currentTime;
     const voice = voices[voiceIndex];
     voiceIndex = (voiceIndex + 1) % numVoices;
@@ -82,9 +85,12 @@ function playSound(midiMessage: MIDIMessage): void {
 
     voice.isPlaying = true;
     voice.gain.gain.setValueAtTime(midiMessage.data1 / 127, startTime);
+    voice.panner.pan.setValueAtTime(
+      ((index / store.state.wheels.allIds.length) * 2) - 1,
+      startTime,
+    );
     voice.source = audioCtx.createBufferSource();
-    voice.source.buffer = buffers[bufferIndex];
-    // voice.source.playbackRate.setValueAtTime(2 ** ((midiMessage.data0 - 60) / 12), startTime);
+    voice.source.buffer = buffers[index];
     voice.source.connect(voice.gain);
     voice.source.start(startTime);
     voice.source.onended = () => {
