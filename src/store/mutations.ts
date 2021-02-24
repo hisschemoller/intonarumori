@@ -39,7 +39,7 @@ export const mutations: MutationTree<State> & Mutations = {
     state.wheels.byId = state.midiControllers.reduce((accumulator, value) => ({
       ...accumulator,
       [value.toString()]: {
-        torqueControl: 0,
+        torqueControl: ((((Math.random() * -0.1) - 4) + 1) / -19) * 127,
       },
     }), {});
   },

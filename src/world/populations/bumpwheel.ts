@@ -21,7 +21,7 @@ export default class Bumpwheel {
 
   private wheel!: Ammo.btRigidBody;
 
-  private torque = new Ammo.btVector3(0, 0, -4 - (Math.random() * 0.1));
+  private torque = new Ammo.btVector3(0, 0, 0);
 
   private index: number;
 
@@ -39,6 +39,8 @@ export default class Bumpwheel {
     this.control = control;
     this.create(scene, physicsWorld, positionZ);
     this.setupListener();
+    this.setTorque(this.store.state.wheels.byId[this.control].torqueControl);
+    this.update();
   }
 
   /**
@@ -117,12 +119,16 @@ export default class Bumpwheel {
       () => this.store.state.wheels.byId[this.control].torqueControl,
     );
     watch(torqueControlRef, () => {
-      if (torqueControlRef.value > 0) {
-        this.torque.setZ(-1 + ((torqueControlRef.value / 127) * -19));
-      } else {
-        this.torque.setZ(0);
-      }
+      this.setTorque(torqueControlRef.value);
     });
+  }
+
+  private setTorque(torque: number): void {
+    if (torque > 0) {
+      this.torque.setZ(-1 + ((torque / 127) * -19));
+    } else {
+      this.torque.setZ(0);
+    }
   }
 
   /**
