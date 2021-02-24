@@ -10,7 +10,7 @@
         v-for="wheelId in wheels.allIds"
         :key="wheelId"
         :id="wheelId"
-        class="p-ml-3 p-mr-3"
+        class="p-ml-1 p-mr-1 p-flex-column"
       />
     </div>
   </Sidebar>
