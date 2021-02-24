@@ -1,14 +1,14 @@
 <template>
   <div class="p-d-flex p-flex-column">
     <Chip
-      class="p-mb-2"
+      class="p-mb-3"
     >{{torqueControlFixed}}</Chip>
     <Slider
       :max="127"
       :min="0"
       orientation="vertical"
       v-model="torqueControl"
-      class="p-as-center"
+      class="p-as-center p-mb-5"
     />
   </div>
 </template>
@@ -55,10 +55,19 @@ export default defineComponent({
 
 <style scoped>
 .p-chip {
+  border-radius: 0;
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   padding: 0.2rem 0;
   text-align: center;
-  width: 50px;
+  width: 32px;
+}
+@media screen and (min-width: 480px) {
+  .p-chip {
+    border-radius: 16px;
+    font-size: 0.9rem;
+    margin: 0 2px;
+    width: 36px;
+  }
 }
 </style>

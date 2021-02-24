@@ -10,7 +10,7 @@
         v-for="wheelId in wheels.allIds"
         :key="wheelId"
         :id="wheelId"
-        class="p-ml-1 p-mr-1 p-flex-column"
+        class="p-ml-0 p-mr-0 p-flex-column"
       />
     </div>
   </Sidebar>
@@ -45,3 +45,9 @@ export default defineComponent({
 });
 
 </script>
+
+<style scoped>
+.p-sidebar-bottom {
+  height: 12rem;
+}
+</style>

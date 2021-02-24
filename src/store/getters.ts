@@ -6,5 +6,5 @@ export type Getters = {
 };
 
 export const getters: GetterTree<State, State> & Getters = {
-  getTorqueControlFixed: (state) => (id: string) => state.wheels.byId[id].torqueControl.toFixed(1),
+  getTorqueControlFixed: (state) => (id: string) => state.wheels.byId[id].torqueControl.toFixed(0),
 };
