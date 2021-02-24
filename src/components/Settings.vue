@@ -17,10 +17,10 @@
       ></Dropdown>
       <div class="status">Status</div>
     </div>
-    <div class="p-col-12 p-d-flex p-ai-center">
+    <!-- <div class="p-col-12 p-d-flex p-ai-center">
       <Button @click="reset" class="p-mr-2">Reset</Button>
       Clear all data and start fresh.
-    </div>
+    </div> -->
   </div>
   <template #footer>
     <Button label="Close" icon="pi pi-check" autofocus @click="isVisible = false" />
@@ -75,9 +75,9 @@ export default defineComponent({
     });
 
     // reset
-    const reset = () => {
-      store.commit(MutationType.Reset, undefined);
-    };
+    // const reset = () => {
+    //   store.commit(MutationType.Reset, undefined);
+    // };
 
     return {
       bluetoothMessage,
@@ -85,7 +85,7 @@ export default defineComponent({
       isVisible,
       midiInputNames,
       midiSelectedInput,
-      reset,
+      // reset,
     };
   },
 });
