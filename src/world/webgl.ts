@@ -6,6 +6,7 @@ import {
   DirectionalLight,
   GridHelper,
   HemisphereLight,
+  MathUtils,
   PCFShadowMap,
   PerspectiveCamera,
   Scene,
@@ -18,12 +19,14 @@ import addWindowResizeCallback from '../utils/windowresize';
 import BumpwheelPopulation from './populations/bumpwheels-population';
 import PopulationInterface from './population-interface';
 
+const FOV = 45;
+const PLANE_ASPECT_RATIO = 16 / 9;
+
 let renderer: WebGLRenderer;
 let clock: Clock;
 let scene: Scene;
 let camera: PerspectiveCamera;
 let orbitControls: OrbitControls;
-let canvasRect: DOMRect;
 let population: PopulationInterface;
 
 /**
@@ -39,28 +42,30 @@ function draw() {
 
 /**
  * Window resize event handler.
+ * We have an actual width and a target width and want to move the camera back to cover the width.
+ * https://discourse.threejs.org/t/keeping-an-object-scaled-based-on-the-bounds-of-the-canvas
+ * -really-battling-to-explain-this-one/17574/9
  */
 function onWindowResize() {
-  canvasRect = renderer.domElement.getBoundingClientRect();
-  renderer.setSize(window.innerWidth, window.innerHeight - canvasRect.top);
-  camera.aspect = window.innerWidth / (window.innerHeight - canvasRect.top);
+  renderer.setSize(window.innerWidth, window.innerHeight, true);
+  camera.aspect = window.innerWidth / window.innerHeight;
+
+  if (camera.aspect > PLANE_ASPECT_RATIO) {
+    // window large enough
+    camera.fov = FOV;
+  } else {
+    // window too narrow
+    const cameraHeight = Math.tan(MathUtils.degToRad(FOV / 2));
+    const ratio = camera.aspect / PLANE_ASPECT_RATIO;
+    const newCameraHeight = cameraHeight / ratio;
+    camera.fov = MathUtils.radToDeg(Math.atan(newCameraHeight)) * 2;
+  }
+
   camera.updateProjectionMatrix();
-  canvasRect = renderer.domElement.getBoundingClientRect();
 
-  // move camera further back when viewport height increases so objects stay the same size
-  const scale = 0.01; // 0.15;
-  const fieldOfView = camera.fov * (Math.PI / 180); // convert fov to radians
-  const targetZ = canvasRect.height / (2 * Math.tan(fieldOfView / 2));
-  camera.position.set(camera.position.x, camera.position.y, targetZ * scale);
-
-  // orbitControls.saveState();
-
-  // new viewport size in 3D units at a given distance from the camera.
-  // @see https://stackoverflow.com/questions/13350875/three-js-width-of-view/13351534#13351534
-  // const dist = camera.position.z;
-  // const vFOV = MathUtils.degToRad(camera.fov); // convert vertical fov to radians
-  // const visibleHeight = 2 * Math.tan(vFOV / 2) * dist;
-  // const visibleWidth = visibleHeight * camera.aspect;
+  if (orbitControls) {
+    orbitControls.update();
+  }
 }
 
 /**
@@ -79,8 +84,9 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
   scene = new Scene();
   scene.background = new Color(0xbbddff);
 
-  camera = new PerspectiveCamera(45, 1, 1, 500);
+  camera = new PerspectiveCamera(FOV, 1, 1, 500);
   camera.name = 'camera';
+  camera.position.set(10, 4, 6);
   camera.lookAt(new Vector3(0, 0, 0));
   scene.add(camera);
 
