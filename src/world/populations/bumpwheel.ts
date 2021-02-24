@@ -69,6 +69,7 @@ export default class Bumpwheel {
     this.wheel = compound.userData.physicsBody;
     this.wheel.setDamping(0.99, 0.99);
     this.wheel.setUserIndex(this.index + 100);
+    this.wheel.setActivationState(4);
 
     const hinge1 = new Ammo.btHingeConstraint(
       fix.userData.physicsBody,
@@ -117,7 +118,7 @@ export default class Bumpwheel {
     );
     watch(torqueControlRef, () => {
       if (torqueControlRef.value > 0) {
-        this.torque.setZ(-3 + ((torqueControlRef.value / 127) * -20));
+        this.torque.setZ(-1 + ((torqueControlRef.value / 127) * -19));
       } else {
         this.torque.setZ(0);
       }
