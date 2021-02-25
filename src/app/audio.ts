@@ -1,14 +1,21 @@
 import { computed, watch } from 'vue';
 import { Store } from 'vuex';
+import {
+  AudioContext,
+  IAudioContext,
+  IAudioBufferSourceNode,
+  IGainNode,
+  IStereoPannerNode,
+} from 'standardized-audio-context';
 import { useStore } from '../store';
 import { State } from '../store/state';
 import { MIDIMessage } from './midi-types';
 
 type Voice = {
   isPlaying: boolean;
-  gain: GainNode;
-  panner: StereoPannerNode;
-  source?: AudioBufferSourceNode;
+  gain: IGainNode<IAudioContext>;
+  panner: IStereoPannerNode<IAudioContext>;
+  source?: IAudioBufferSourceNode<IAudioContext>;
 };
 
 const numVoices = 32;
@@ -105,7 +112,7 @@ export function setup(): void {
   const settingsVisibleRef = computed(() => store.state.isSettingsVisible);
   watch(settingsVisibleRef, () => {
     if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      audioCtx = new AudioContext();
       loadAudioFiles();
       createVoices();
     }

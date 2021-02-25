@@ -17,6 +17,7 @@
     ],
     "typeRoots": [
       "./node_modules/@types",
+      "./node_modules/standardized-audio-context",
       "./src/@types",
     ],
     "paths": {
