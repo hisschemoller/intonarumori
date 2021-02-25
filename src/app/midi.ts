@@ -22,7 +22,6 @@ function onMIDIMessage(e: WebMidi.MIDIMessageEvent): void {
     case MIDIMessageType.CONTROL_CHANGE:
     case MIDIMessageType.NOTE_ON:
     case MIDIMessageType.NOTE_OFF:
-
       store.commit(MutationType.HandleMIDIMessage, {
         // eslint-disable-next-line no-bitwise
         type: e.data[0] & 0xf0,

@@ -28,14 +28,6 @@ const audioFileNames = [
   'reyongmid3.wav',
   'reyongmid5.wav',
   'reyongmid6.wav',
-  // '98715__marini24__ball-2.aiff',
-  // '98718__marini24__ball-3.aiff',
-  // '98719__marini24__ball-4.aiff',
-  // '98720__marini24__ball-5.aiff',
-  // '98721__marini24__ball-6.aiff',
-  // '98722__marini24__ball-7.aiff',
-  // '98723__marini24__ball-8.aiff',
-  // '98724__marini24__ball-9.aiff',
 ];
 const buffers: AudioBuffer[] = [];
 const voices: Voice[] = [];
