@@ -1,3 +1,31 @@
 # Intonarumori
 
-Javascript app using the Vue framework to create musical sounds controlled by a 3D physics engine which uses the three.js and ammo.js libraries.
+Intonarumori is a project to explore creating sounds, rhythms and music with simulated machines.
+
+[Intonarumori](https://en.wikipedia.org/wiki/Intonarumori) was the name of the experimental musical instruments invented and built by the Italian futurist [Luigi Russolo](https://en.wikipedia.org/wiki/Luigi_Russolo) in the early twentieth century.
+
+![Russolo's laboratory](assets/img/art_2130_1_intonarumori.jpg 'Russolo\'s laboratory')
+
+This project takes inspiration from Russolo and his Intonarumori, as well as from [Jean Tinguely](https://en.wikipedia.org/wiki/Jean_Tinguely), another twentieth century artist who built noisy machines as artworks.
+
+In this project the aim is to create virtual machines that run in a web browser. They generate their sounds through the computer's speaker and are operated by mouse click, a device's touch screen or externally via MIDI signals.
+
+## Kodaly Kibo
+
+![Kodaly Kibo](assets/img/kibo-bb-prospettiva.png 'Kodaly Kibo')
+
+For MIDI control the machines are especially designed to work with the [Kodaly Kibo](https://www.kodaly.app/). The Kibo is a MIDI controller with eight wooden shapes that can be played like drum pads or piano keys. MIDI transmits wireless over Bluetooth LE or over USB cable.
+
+Only common MIDI messages are used however, so other MIDI controllers can be used as well.
+
+## Machine #1
+
+![Machine 1](assets/img/machine1.jpg 'Machine 1')
+
+Machine 1 has eight spinning wheels with protrusions that hit free floating sticks. When hit they trigger eight samples of Indonesian Gamelan instrument sounds. Each wheel spins at it's own speed. This creates interesting continually changing patterns.
+
+The speed of each wheel can be set individually by eight sliders in the control panel, or by incoming MIDI continuous controllers 1 to 8 on any MIDI channel.
+
+## Code
+
+This project is written in TypeScript. It's built on the Vue 3 framework with VueX and the PrimeVUE components library. The machines are made with three.js and the ammo.js physics engine.
