@@ -50,7 +50,7 @@ export default class BumpwheelPopulation extends Population {
                 type: MIDIMessageType.NOTE_ON,
                 channel: 1,
                 data0: 60 + (userIndex - 100),
-                data1: Math.max(127, Math.floor(impulse * 127)) - 17,
+                data1: Math.min(127, Math.floor(impulse * 127)),
               });
             }
           }
