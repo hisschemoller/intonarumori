@@ -56,16 +56,16 @@ export default class Bumpwheel {
     }));
     this.meshes.push(fix);
 
-    const cylinder1 = createCylinder(scene, physicsWorld, new CylinderConfiguration({
+    const wheel = createCylinder(scene, physicsWorld, new CylinderConfiguration({
       h: 0.8, r: 1.5, m: 10, c: color,
     }));
 
-    const bump1 = createBox(scene, physicsWorld, new BoxConfiguration({
+    const bump = createBox(scene, physicsWorld, new BoxConfiguration({
       w: 1, h: 0.15, d: 1, pz: 1.5, c: color,
     }));
 
     const compound = createCompoundShape(scene, physicsWorld, new CompoundConfiguration(
-      { pz: positionZ }, [cylinder1, bump1],
+      { pz: positionZ }, [wheel, bump],
     ));
     this.meshes.push(compound);
     this.wheel = compound.userData.physicsBody;
@@ -86,14 +86,14 @@ export default class Bumpwheel {
     physicsWorld.addConstraint(hinge1, true);
 
     const q = new Quaternion().setFromEuler(new Euler(0, 0, Math.PI * -0.25));
-    const stick = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.3, h: 2, d: 0.3, m: 0.3, c: color, qx: q.x, qy: q.y, qz: q.z, qw: q.w,
+    const tube = createCylinder(scene, physicsWorld, new CylinderConfiguration({
+      h: 2, r: 0.18, m: 0.3, c: color, qx: q.x, qy: q.y, qz: q.z, qw: q.w,
     }));
-    this.meshes.push(stick);
+    this.meshes.push(tube);
 
     const stickHinge = new Ammo.btHingeConstraint(
       fix.userData.physicsBody,
-      stick.userData.physicsBody,
+      tube.userData.physicsBody,
       new Ammo.btVector3(0, 3.9, 0.3),
       new Ammo.btVector3(0, 1, 0),
       new Ammo.btVector3(0, 0, 1),
