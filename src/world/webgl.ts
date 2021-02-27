@@ -30,6 +30,18 @@ let orbitControls: OrbitControls;
 let population: PopulationInterface;
 
 /**
+ * Grid and axes helpers.
+ */
+function addHelpers() {
+  const grid = new GridHelper(10, 10);
+  grid.position.set(0, 0, 0);
+  scene.add(grid);
+
+  const axesHelper = new AxesHelper(10);
+  scene.add(axesHelper);
+}
+
+/**
  * Update the physics world and render the results in 3D.
  */
 function draw() {
@@ -123,15 +135,6 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
   orbitControls.update();
   orbitControls.saveState();
   orbitControls.enabled = true;
-
-  // GRID
-  const grid = new GridHelper(10, 10);
-  grid.position.set(0, 0, 0);
-  scene.add(grid);
-
-  // AXES
-  const axesHelper = new AxesHelper(10);
-  scene.add(axesHelper);
 }
 
 /**
