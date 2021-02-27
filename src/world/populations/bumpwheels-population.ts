@@ -64,9 +64,9 @@ export default class BumpwheelPopulation extends Population {
    */
   private populate(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
     const { wheels } = this.store.state;
-    wheels.allIds.forEach((wheelData, index, allIds) => {
+    wheels.forEach((wheelData, index) => {
       const positionZ = 3.5 - index;
-      const wheel = new Bumpwheel(scene, physicsWorld, index, allIds[index], positionZ);
+      const wheel = new Bumpwheel(scene, physicsWorld, index, positionZ);
       this.wheels.push(wheel);
       this.meshes = [...this.meshes, ...wheel.getMeshes()];
     });

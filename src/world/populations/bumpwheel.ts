@@ -25,21 +25,17 @@ export default class Bumpwheel {
 
   private index: number;
 
-  private control: string;
-
   constructor(
     scene: Scene,
     physicsWorld: Ammo.btDiscreteDynamicsWorld,
     index: number,
-    control: string,
     positionZ: number,
   ) {
     this.store = useStore();
     this.index = index;
-    this.control = control;
     this.create(scene, physicsWorld, positionZ);
     this.setupListener();
-    this.setTorque(this.store.state.wheels.byId[this.control].torqueControl);
+    this.setTorque(this.store.state.wheels[this.index].torqueControl);
     this.update();
   }
 
@@ -91,7 +87,7 @@ export default class Bumpwheel {
     }));
     this.meshes.push(tube);
 
-    const stickHinge = new Ammo.btHingeConstraint(
+    const tubeHinge = new Ammo.btHingeConstraint(
       fix.userData.physicsBody,
       tube.userData.physicsBody,
       new Ammo.btVector3(0, 3.9, 0.3),
@@ -100,8 +96,8 @@ export default class Bumpwheel {
       new Ammo.btVector3(0, 0, 1),
       true,
     );
-    stickHinge.setLimit(0, 1, 1, 1);
-    physicsWorld.addConstraint(stickHinge, true);
+    tubeHinge.setLimit(0, 1, 1, 1);
+    physicsWorld.addConstraint(tubeHinge, true);
   }
 
   /**
@@ -116,7 +112,7 @@ export default class Bumpwheel {
    */
   private setupListener() {
     const torqueControlRef = computed(
-      () => this.store.state.wheels.byId[this.control].torqueControl,
+      () => this.store.state.wheels[this.index].torqueControl,
     );
     watch(torqueControlRef, () => {
       this.setTorque(torqueControlRef.value);

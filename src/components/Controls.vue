@@ -7,9 +7,9 @@
   >
     <div class="p-d-flex p-jc-center">
       <Control
-        v-for="wheelId in wheels.allIds"
-        :key="wheelId"
-        :id="wheelId"
+        v-for="(wheel, index) in wheels"
+        :key="index"
+        :index="index"
         class="p-ml-0 p-mr-0 p-flex-column"
       />
     </div>

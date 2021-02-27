@@ -27,24 +27,28 @@ export default defineComponent({
     Slider,
   },
   props: {
-    id: String,
+    index: {
+      default: 0,
+      type: Number,
+    },
   },
   setup(props) {
     const store = useStore();
 
     // torque slider control
+    const torqueCC = store.state.midiTorqueCCs[props.index];
     const torqueControl = computed({
-      get: () => store.state.wheels.byId[props.id as string].torqueControl,
+      get: () => store.state.wheels[props.index].torqueControl,
       set: (value) => store.commit(MutationType.HandleMIDIMessage, {
         type: MIDIMessageType.CONTROL_CHANGE,
         channel: 1,
-        data0: parseInt(props.id as string, 10),
+        data0: torqueCC,
         data1: value,
       }),
     });
 
     const torqueControlFixed = computed(
-      () => store.getters.getTorqueControlFixed(props.id as string),
+      () => store.getters.getTorqueControlFixed(props.index),
     );
 
     return { torqueControl, torqueControlFixed };

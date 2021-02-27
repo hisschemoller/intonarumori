@@ -29,19 +29,19 @@ export type Mutations = {
 export const mutations: MutationTree<State> & Mutations = {
   [MutationType.HandleMIDIMessage](state, message) {
     const { type, data0, data1 } = message;
-    if (type === MIDIMessageType.CONTROL_CHANGE
-      && state.wheels.allIds.includes(data0.toString())) {
-      state.wheels.byId[data0.toString()].torqueControl = data1;
+    if (type === MIDIMessageType.CONTROL_CHANGE) {
+      if (state.midiTorqueCCs.indexOf(data0) !== -1) {
+        state.wheels[state.midiTorqueCCs.indexOf(data0)].torqueControl = data1;
+      } else if (state.midiHingeCCs.indexOf(data0) !== -1) {
+        state.wheels[state.midiHingeCCs.indexOf(data0)].hingeControl = data1;
+      }
     }
   },
   [MutationType.Initialise](state) {
-    state.wheels.allIds = state.midiControllers.map((value) => value.toString());
-    state.wheels.byId = state.midiControllers.reduce((accumulator, value) => ({
-      ...accumulator,
-      [value.toString()]: {
-        torqueControl: ((((Math.random() * -0.1) - 4) + 1) / -19) * 127,
-      },
-    }), {});
+    state.wheels = state.midiTorqueCCs.map(() => ({
+      hingeControl: 127,
+      torqueControl: ((((Math.random() * -0.1) - 4) + 1) / -19) * 127,
+    }));
   },
   [MutationType.PlaySound](state, message) {
     state.midiSoundMessage = message;
