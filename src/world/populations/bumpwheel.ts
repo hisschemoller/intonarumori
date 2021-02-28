@@ -23,6 +23,10 @@ export default class Bumpwheel {
 
   private torque = new Ammo.btVector3(0, 0, 0);
 
+  private slider!: Ammo.btSliderConstraint
+
+  private sliderBlockBody!: Ammo.btRigidBody;
+
   private index: number;
 
   constructor(
@@ -86,6 +90,7 @@ export default class Bumpwheel {
       w: 0.2, h: 0.2, d: 0.2, py: 5, c: color,
     }));
     this.meshes.push(sliderBlock);
+    this.sliderBlockBody = sliderBlock.userData.physicsBody;
 
     const localA = new Ammo.btTransform();
     const localB = new Ammo.btTransform();
@@ -97,18 +102,18 @@ export default class Bumpwheel {
     localB.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
     localA.setOrigin(new Ammo.btVector3(0, 4.1, 0.3));
     localB.setOrigin(new Ammo.btVector3(0, 0, 0));
-    const slider = new Ammo.btSliderConstraint(
+    this.slider = new Ammo.btSliderConstraint(
       fix.userData.physicsBody,
       sliderBlock.userData.physicsBody,
       localA,
       localB,
       true,
     );
-    slider.setLowerLinLimit(0);
-    slider.setUpperLinLimit(0.5);
-    slider.setLowerAngLimit(0);
-    slider.setUpperAngLimit(0);
-    physicsWorld.addConstraint(slider, true);
+    this.slider.setLowerLinLimit(0);
+    this.slider.setUpperLinLimit(0.5);
+    this.slider.setLowerAngLimit(0);
+    this.slider.setUpperAngLimit(0);
+    physicsWorld.addConstraint(this.slider, true);
 
     const q = new Quaternion().setFromEuler(new Euler(0, 0, Math.PI * -0.25));
     const tube = createCylinder(scene, physicsWorld, new CylinderConfiguration({
@@ -146,6 +151,20 @@ export default class Bumpwheel {
     watch(torqueControlRef, () => {
       this.setTorque(torqueControlRef.value);
     });
+
+    const isEnabledRef = computed(
+      () => this.store.state.wheels[this.index].hingeControl,
+    );
+    watch(isEnabledRef, () => {
+      this.setEnabled(isEnabledRef.value === 127);
+    });
+  }
+
+  private setEnabled(isEnabled: boolean): void {
+    const limit = isEnabled ? 0 : 0.5;
+    this.sliderBlockBody.activate();
+    this.slider.setLowerLinLimit(limit);
+    this.slider.setUpperLinLimit(limit);
   }
 
   private setTorque(torque: number): void {
