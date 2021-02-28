@@ -45,7 +45,7 @@ export default class BumpwheelPopulation extends Population {
         for (let j = 0; j < numContacts; j += 1) {
           const contactPoint = contactManifold.getContactPoint(j);
           const distance = contactPoint.getDistance();
-          if (distance <= 0) {
+          if (distance <= 0.2) {
             const impulse = contactPoint.getAppliedImpulse();
             if (impulse > 0.1) {
               this.store.commit(MutationType.PlaySound, {
