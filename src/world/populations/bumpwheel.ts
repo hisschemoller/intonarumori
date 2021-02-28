@@ -47,6 +47,7 @@ export default class Bumpwheel {
   ): void {
     // eslint-disable-next-line no-bitwise
     const color = 0x224400 + ((this.index * 10) << 8);
+
     const fix = createBox(scene, physicsWorld, new BoxConfiguration({
       w: 0.1, h: 0.1, d: 0.1, pz: positionZ - 0.3, m: 0, c: color,
     }));
@@ -81,6 +82,34 @@ export default class Bumpwheel {
     // hinge1.enableAngularMotor(true, -1.5, 3);
     physicsWorld.addConstraint(hinge1, true);
 
+    const sliderBlock = createBox(scene, physicsWorld, new BoxConfiguration({
+      w: 0.2, h: 0.2, d: 0.2, py: 5, c: color,
+    }));
+    this.meshes.push(sliderBlock);
+
+    const localA = new Ammo.btTransform();
+    const localB = new Ammo.btTransform();
+    localA.setIdentity();
+    localB.setIdentity();
+
+    // slide along x-axis is default, so rotate 90 degrees around the z-axis to slide y-axis
+    localA.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
+    localB.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
+    localA.setOrigin(new Ammo.btVector3(0, 4.1, 0.3));
+    localB.setOrigin(new Ammo.btVector3(0, 0, 0));
+    const slider = new Ammo.btSliderConstraint(
+      fix.userData.physicsBody,
+      sliderBlock.userData.physicsBody,
+      localA,
+      localB,
+      true,
+    );
+    slider.setLowerLinLimit(0);
+    slider.setUpperLinLimit(0.5);
+    slider.setLowerAngLimit(0);
+    slider.setUpperAngLimit(0);
+    physicsWorld.addConstraint(slider, true);
+
     const q = new Quaternion().setFromEuler(new Euler(0, 0, Math.PI * -0.25));
     const tube = createCylinder(scene, physicsWorld, new CylinderConfiguration({
       h: 2, r: 0.18, m: 0.3, c: color, qx: q.x, qy: q.y, qz: q.z, qw: q.w,
@@ -88,9 +117,9 @@ export default class Bumpwheel {
     this.meshes.push(tube);
 
     const tubeHinge = new Ammo.btHingeConstraint(
-      fix.userData.physicsBody,
+      sliderBlock.userData.physicsBody,
       tube.userData.physicsBody,
-      new Ammo.btVector3(0, 3.9, 0.3),
+      new Ammo.btVector3(0, -0.25, 0),
       new Ammo.btVector3(0, 1, 0),
       new Ammo.btVector3(0, 0, 1),
       new Ammo.btVector3(0, 0, 1),
