@@ -8,6 +8,8 @@ import { MutationType } from '../../store/mutations';
 import { MIDIMessageType } from '../../app/midi-types';
 import Population from '../population';
 import Bumpwheel from './bumpwheel';
+import createBox from '../primitives/box';
+import BoxConfiguration from '../primitives/BoxConfiguration';
 
 export default class BumpwheelPopulation extends Population {
   private store: Store<State>;
@@ -63,10 +65,15 @@ export default class BumpwheelPopulation extends Population {
    * Create the physics and 3D world population.
    */
   private populate(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
+    const fix = createBox(scene, physicsWorld, new BoxConfiguration({
+      w: 0.1, h: 0.1, d: 0.1, pz: 4.5, m: 0, c: 0x224400,
+    }));
+    this.meshes.push(fix);
+
     const { wheels } = this.store.state;
     wheels.forEach((wheelData, index) => {
       const positionZ = 3.5 - index;
-      const wheel = new Bumpwheel(scene, physicsWorld, index, positionZ);
+      const wheel = new Bumpwheel(scene, physicsWorld, index, positionZ, fix.userData.physicsBody);
       this.wheels.push(wheel);
       this.meshes = [...this.meshes, ...wheel.getMeshes()];
     });

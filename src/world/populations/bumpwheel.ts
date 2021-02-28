@@ -34,10 +34,11 @@ export default class Bumpwheel {
     physicsWorld: Ammo.btDiscreteDynamicsWorld,
     index: number,
     positionZ: number,
+    fixedBody: Ammo.btRigidBody,
   ) {
     this.store = useStore();
     this.index = index;
-    this.create(scene, physicsWorld, positionZ);
+    this.create(scene, physicsWorld, positionZ, fixedBody);
     this.setupListener();
     this.setTorque(this.store.state.wheels[this.index].torqueControl);
     this.update();
@@ -47,15 +48,13 @@ export default class Bumpwheel {
    * Create the physics and 3D world population.
    */
   private create(
-    scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld, positionZ: number,
+    scene: Scene,
+    physicsWorld: Ammo.btDiscreteDynamicsWorld,
+    positionZ: number,
+    fixedBody: Ammo.btRigidBody,
   ): void {
     // eslint-disable-next-line no-bitwise
     const color = 0x224400 + ((this.index * 10) << 8);
-
-    const fix = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.1, h: 0.1, d: 0.1, pz: positionZ - 0.3, m: 0, c: color,
-    }));
-    this.meshes.push(fix);
 
     const wheel = createCylinder(scene, physicsWorld, new CylinderConfiguration({
       h: 0.8, r: 1.5, m: 10, c: color,
@@ -75,9 +74,9 @@ export default class Bumpwheel {
     this.wheel.setActivationState(4);
 
     const hinge1 = new Ammo.btHingeConstraint(
-      fix.userData.physicsBody,
+      fixedBody,
       compound.userData.physicsBody,
-      new Ammo.btVector3(0, 0, 0.3),
+      new Ammo.btVector3(0, 0, positionZ - 4.5),
       new Ammo.btVector3(0, 0, 0),
       new Ammo.btVector3(0, 0, 1),
       new Ammo.btVector3(0, 1, 0),
@@ -100,10 +99,10 @@ export default class Bumpwheel {
     // slide along x-axis is default, so rotate 90 degrees around the z-axis to slide y-axis
     localA.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
     localB.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
-    localA.setOrigin(new Ammo.btVector3(0, 4.1, 0.3));
+    localA.setOrigin(new Ammo.btVector3(0, 4.1, positionZ - 4.5));
     localB.setOrigin(new Ammo.btVector3(0, 0, 0));
     this.slider = new Ammo.btSliderConstraint(
-      fix.userData.physicsBody,
+      fixedBody,
       sliderBlock.userData.physicsBody,
       localA,
       localB,
