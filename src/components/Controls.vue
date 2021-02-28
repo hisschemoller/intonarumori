@@ -48,6 +48,6 @@ export default defineComponent({
 
 <style scoped>
 .p-sidebar-bottom {
-  height: 12rem;
+  height: 15rem;
 }
 </style>
