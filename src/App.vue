@@ -43,9 +43,3 @@ import { setup as setupAudio } from './app/audio';
 })
 export default class App extends Vue {}
 </script>
-
-<style>
-body {
-  margin: 0;
-}
-</style>
