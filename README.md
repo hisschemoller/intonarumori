@@ -6,7 +6,9 @@ Intonarumori is a project to explore creating sounds, rhythms and music with sim
 
 ![Russolo's laboratory](assets/img/art_2130_1_intonarumori.jpg 'Russolo\'s laboratory')
 
-This project takes inspiration from Russolo and his Intonarumori, as well as from [Jean Tinguely](https://en.wikipedia.org/wiki/Jean_Tinguely), another twentieth century artist who built noisy machines as artworks.
+This project takes inspiration from Russolo and his Intonarumori, as well as from [Jean Tinguely](https://en.wikipedia.org/wiki/Jean_Tinguely), an artist known for his kinetic art sculptures. Machinelike artworks that often produced repetitive noise and sounds.
+
+![Jean Tinguely](assets/img/jean-tinguely.jpg 'Jean Tinguely')
 
 In this project the aim is to create virtual machines that run in a web browser. They generate their sounds through the computer's speaker and are operated by mouse click, a device's touch screen or externally via MIDI signals.
 
@@ -26,6 +28,17 @@ Machine 1 has eight spinning wheels with protrusions that hit free floating stic
 
 The speed of each wheel can be set individually by eight sliders in the control panel, or by incoming MIDI continuous controllers 1 to 8 on any MIDI channel.
 
+The toggle buttons below the sliders switch the wheels on and off.
+
+### MIDI implementation
+
+On any MIDI channel:
+
+- CC 1 to 8 - Rotation speed of the eight wheels.
+- CC 102 TO 109 - On / Off toggle for each wheel, where:
+  - Value 127 switches the wheel on.
+  - Values 126 and below switch the wheel off.
+
 ## Code
 
-This project is written in TypeScript. It's built on the Vue 3 framework with VueX and the PrimeVUE components library. The machines are made with three.js and the ammo.js physics engine.
+This project is written in [TypeScript](https://www.typescriptlang.org/). It's built on the [Vue 3](https://v3.vuejs.org/) framework with [VueX](https://vuex.vuejs.org/) and the [PrimeVUE](https://www.primefaces.org/primevue/) components library. The machines are made with [three.js](https://threejs.org/) and the [ammo.js](https://github.com/kripken/ammo.js/) physics engine.
