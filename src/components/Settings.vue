@@ -101,12 +101,17 @@ export default defineComponent({
   padding-bottom: 0.65rem;
   padding-top: 0.65rem;
 }
+#app .p-dialog-title {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 400;
+}
 .subheader {
-  font-weight: 500;
+  color: var(--primary-color);
   margin: 10px 0 10px 0;
 }
 .status {
-  color: var(--color-mid);
+  color: var(--bluegray-500);
   margin-top: 10px;
 }
 @media screen and (min-width: 576px) {
