@@ -2,7 +2,7 @@
   <div class="p-d-flex p-flex-column">
     <Chip
       class="p-mb-3"
-    >{{torqueControlFixed}}</Chip>
+    >{{torqueControl.toFixed(0)}}</Chip>
     <Slider
       :max="127"
       :min="0"
@@ -55,10 +55,6 @@ export default defineComponent({
       }),
     });
 
-    const torqueControlFixed = computed(
-      () => store.getters.getTorqueControlFixed(props.index),
-    );
-
     // torque toggle control
     const isEnabledCC = store.state.midiHingeCCs[props.index];
     const isEnabled = computed({
@@ -71,7 +67,7 @@ export default defineComponent({
       }),
     });
 
-    return { isEnabled, torqueControl, torqueControlFixed };
+    return { isEnabled, torqueControl };
   },
 });
 

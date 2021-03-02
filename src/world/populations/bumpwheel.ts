@@ -61,7 +61,7 @@ export default class Bumpwheel {
     }));
 
     const bump = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 1, h: 0.15, d: 1, pz: 1.5, c: color,
+      w: 0.4, h: 0.4, d: 1, pz: 1.5, c: color,
     }));
 
     const compound = createCompoundShape(scene, physicsWorld, new CompoundConfiguration(

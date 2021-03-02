@@ -10,7 +10,7 @@ import {
 import CylinderConfiguration from './CylinderConfiguration';
 
 const MARGIN = 0.05;
-const RADIAL_SEGMENTS = 16;
+const RADIAL_SEGMENTS = 64;
 const RESTITUTION = 0.8;
 
 /**
@@ -31,7 +31,7 @@ export default function createCylinder(
   const geometry = new CylinderBufferGeometry(radius, radius, height, RADIAL_SEGMENTS);
   const cylinder = new Mesh(
     geometry,
-    new MeshPhongMaterial({ color }),
+    new MeshPhongMaterial({ color, flatShading: false }),
   );
   cylinder.position.set(pos.x, pos.y, pos.z);
   cylinder.castShadow = true;
