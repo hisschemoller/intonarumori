@@ -2,13 +2,22 @@
 
 Intonarumori is a project to explore creating sounds, rhythms and music with simulated machines.
 
-[Intonarumori](https://en.wikipedia.org/wiki/Intonarumori) was the name of the experimental musical instruments invented and built by the Italian futurist [Luigi Russolo](https://en.wikipedia.org/wiki/Luigi_Russolo) in the early twentieth century.
+[Intonarumori](https://en.wikipedia.org/wiki/Intonarumori) was the name of the experimental musical instruments invented and built by the Italian futurist artist [Luigi Russolo](https://en.wikipedia.org/wiki/Luigi_Russolo) in the early twentieth century.
+
+<div style="display: flex; justify-content: space-between;">
+<div style="max-width:49%;">
 
 ![Russolo's laboratory](assets/img/art_2130_1_intonarumori.jpg 'Russolo\'s laboratory')
 
-This project takes inspiration from Russolo and his Intonarumori, as well as from [Jean Tinguely](https://en.wikipedia.org/wiki/Jean_Tinguely), an artist known for his kinetic art sculptures. Machinelike artworks that often produced repetitive noise and sounds.
+</div>
+<div style="max-width:49%;">
 
 ![Jean Tinguely](assets/img/jean-tinguely.jpg 'Jean Tinguely')
+
+</div>
+</div>
+
+This project takes inspiration from Russolo and his Intonarumori, as well as from [Jean Tinguely](https://en.wikipedia.org/wiki/Jean_Tinguely), an artist known for his kinetic art sculptures. Machinelike artworks that often produced repetitive noise and sounds.
 
 In this project the aim is to create virtual machines that run in a web browser. They generate their sounds through the computer's speaker and are operated by mouse click, a device's touch screen or externally via MIDI signals.
 
@@ -22,7 +31,13 @@ Only common MIDI messages are used however, so other MIDI controllers can be use
 
 ## Machine #1
 
+<div style="max-width:648px;">
+
 ![Machine 1](assets/img/machine1.jpg 'Machine 1')
+
+</div>
+
+Demo online here: [https://www.hisschemoller.com/intonarumori/1/](https://www.hisschemoller.com/intonarumori/1/)
 
 Machine 1 has eight spinning wheels with protrusions that hit free floating sticks. When hit they trigger eight samples of Indonesian Gamelan instrument sounds. Each wheel spins at it's own speed. This creates interesting continually changing patterns.
 
