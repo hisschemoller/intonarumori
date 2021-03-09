@@ -5,16 +5,12 @@ Intonarumori is a project to explore creating sounds, rhythms and music with sim
 [Intonarumori](https://en.wikipedia.org/wiki/Intonarumori) was the name of the experimental musical instruments invented and built by the Italian futurist artist [Luigi Russolo](https://en.wikipedia.org/wiki/Luigi_Russolo) in the early twentieth century.
 
 <div style="display: flex; justify-content: space-between;">
-<div style="max-width:49%;">
-
-![Russolo's laboratory](assets/img/art_2130_1_intonarumori.jpg 'Russolo\'s laboratory')
-
-</div>
-<div style="max-width:49%;">
-
-![Jean Tinguely](assets/img/jean-tinguely.jpg 'Jean Tinguely')
-
-</div>
+  <div style="max-width:49%;">
+    <img src="assets/img/art_2130_1_intonarumori.jpg" alt="Russolo's laboratory" title="Russolo's laboratory" />
+  </div>
+  <div style="max-width:49%;">
+    <img src="assets/img/jean-tinguely.jpg" alt="Jean Tinguely" title="Jean Tinguely" />
+  </div>
 </div>
 
 This project takes inspiration from Russolo and his Intonarumori, as well as from [Jean Tinguely](https://en.wikipedia.org/wiki/Jean_Tinguely), an artist known for his kinetic art sculptures. Machinelike artworks that often produced repetitive noise and sounds.
@@ -32,9 +28,7 @@ Only common MIDI messages are used however, so other MIDI controllers can be use
 ## Machine #1
 
 <div style="max-width:648px;">
-
-![Machine 1](assets/img/machine1.jpg 'Machine 1')
-
+  <img src="assets/img/machine1.jpg" alt="Machine 1" title="Machine 1" />
 </div>
 
 Demo online here: [https://www.hisschemoller.com/intonarumori/1/](https://www.hisschemoller.com/intonarumori/1/)
