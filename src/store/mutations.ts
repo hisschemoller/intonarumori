@@ -54,7 +54,10 @@ export const mutations: MutationTree<State> & Mutations = {
 
       case MIDIMessageType.PROGRAM_CHANGE: {
         // eslint-disable-next-line no-case-declarations
-        const { kiboKnobProgramChangeValue: oldValue } = state;
+        const {
+          kiboKnobProgramChangeValue: oldValue,
+          kiboKnobProgramChangeTime: oldTime,
+        } = state;
         // eslint-disable-next-line no-case-declarations
         let change = data0 - oldValue;
         if (data0 === 127 && oldValue === 0) {
@@ -62,7 +65,14 @@ export const mutations: MutationTree<State> & Mutations = {
         } else if (data0 === 0 && oldValue === 127) {
           change = 1;
         }
+
+        // change ten times as fast when knob events are less than 150ms apart
+        const time = Date.now();
+        if (time - oldTime < 150) {
+          change *= 10;
+        }
         state.kiboKnobProgramChangeValue = data0;
+        state.kiboKnobProgramChangeTime = time;
         state.wheels.forEach((wheel, index) => {
           if (wheel.isKiboPadPressed) {
             state.wheels[index].torqueControl = Math.max(
