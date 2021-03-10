@@ -1,6 +1,10 @@
 import { MutationTree } from 'vuex';
 import { State } from './state';
-import { MIDIMessage, MIDIMessageType } from '../app/midi-types';
+import {
+  KiboMIDINotes,
+  MIDIMessage,
+  MIDIMessageType,
+} from '../app/midi-types';
 
 export enum MutationType {
   HandleMIDIMessage = 'HANDLE_MIDI_MESSAGE',
@@ -29,17 +33,54 @@ export type Mutations = {
 export const mutations: MutationTree<State> & Mutations = {
   [MutationType.HandleMIDIMessage](state, message) {
     const { type, data0, data1 } = message;
-    if (type === MIDIMessageType.CONTROL_CHANGE) {
-      if (state.midiTorqueCCs.indexOf(data0) !== -1) {
-        state.wheels[state.midiTorqueCCs.indexOf(data0)].torqueControl = data1;
-      } else if (state.midiHingeCCs.indexOf(data0) !== -1) {
-        state.wheels[state.midiHingeCCs.indexOf(data0)].hingeControl = data1;
+    switch (type) {
+      case MIDIMessageType.CONTROL_CHANGE:
+        if (state.midiTorqueCCs.indexOf(data0) !== -1) {
+          state.wheels[state.midiTorqueCCs.indexOf(data0)].torqueControl = data1;
+        } else if (state.midiHingeCCs.indexOf(data0) !== -1) {
+          state.wheels[state.midiHingeCCs.indexOf(data0)].hingeControl = data1;
+        }
+        break;
+
+      case MIDIMessageType.NOTE_OFF:
+      case MIDIMessageType.NOTE_ON: {
+        // eslint-disable-next-line no-case-declarations
+        const index = KiboMIDINotes.indexOf(data0);
+        if (index !== -1) {
+          state.wheels[index].isKiboPadPressed = type === MIDIMessageType.NOTE_ON;
+        }
+        break;
       }
+
+      case MIDIMessageType.PROGRAM_CHANGE: {
+        // eslint-disable-next-line no-case-declarations
+        const { kiboKnobProgramChangeValue: oldValue } = state;
+        // eslint-disable-next-line no-case-declarations
+        let change = data0 - oldValue;
+        if (data0 === 127 && oldValue === 0) {
+          change = -1;
+        } else if (data0 === 0 && oldValue === 127) {
+          change = 1;
+        }
+        state.kiboKnobProgramChangeValue = data0;
+        state.wheels.forEach((wheel, index) => {
+          if (wheel.isKiboPadPressed) {
+            state.wheels[index].torqueControl = Math.max(
+              0, Math.min(wheel.torqueControl + change, 127),
+            );
+          }
+        });
+        break;
+      }
+
+      default:
+        break;
     }
   },
   [MutationType.Initialise](state) {
     state.wheels = state.midiTorqueCCs.map(() => ({
       hingeControl: 127,
+      isKiboPadPressed: false,
       torqueControl: ((((Math.random() * -0.1) - 4) + 1) / -19) * 127,
     }));
   },

@@ -25,22 +25,30 @@ export const enum BluetoothStatus {
 function onCharacteristicValueChanged(e: Event) {
   const { value } = e.target as BluetoothRemoteGATTCharacteristic;
   if (typeof value !== 'undefined') {
-    // console.log(
-    //   // eslint-disable-next-line no-bitwise
-    //   value.getUint8(2) & 0xf0,
-    //   // eslint-disable-next-line no-bitwise
-    //   value.getUint8(2) & 0x0f,
-    //   value.getUint8(3),
-    //   value.getUint8(4),
-    // );
-    store.commit(MutationType.HandleMIDIMessage, {
-      // eslint-disable-next-line no-bitwise
-      type: value.getUint8(2) & 0xf0,
-      // eslint-disable-next-line no-bitwise
-      channel: value.getUint8(2) & 0x0f,
-      data0: value.getUint8(3),
-      data1: value.getUint8(4),
-    });
+    switch (value.byteLength) {
+      case 5:
+        store.commit(MutationType.HandleMIDIMessage, {
+          // eslint-disable-next-line no-bitwise
+          type: value.getUint8(2) & 0xf0,
+          // eslint-disable-next-line no-bitwise
+          channel: value.getUint8(2) & 0x0f,
+          data0: value.getUint8(3),
+          data1: value.getUint8(4),
+        });
+        break;
+      case 4:
+        // program change from Kibo knob
+        store.commit(MutationType.HandleMIDIMessage, {
+          // eslint-disable-next-line no-bitwise
+          type: value.getUint8(2) & 0xf0,
+          // eslint-disable-next-line no-bitwise
+          channel: value.getUint8(2) & 0x0f,
+          data0: value.getUint8(3),
+        });
+        break;
+      default:
+        console.log('Error: Bluetooth data has the wrong size.');
+    }
   }
 }
 
