@@ -11,6 +11,7 @@ export type State = {
   isControlsVisible: boolean;
   isSettingsVisible: boolean;
   kiboKnobProgramChangeValue: number;
+  kiboKnobProgramChangeTime: number;
   midiHingeCCs: number[];
   midiTorqueCCs: number[];
   midiInputs: string[];
@@ -24,6 +25,7 @@ export const state: State = {
   isControlsVisible: false,
   isSettingsVisible: true,
   kiboKnobProgramChangeValue: 0,
+  kiboKnobProgramChangeTime: 0,
   midiHingeCCs: [102, 103, 104, 105, 106, 107, 108, 109],
   midiTorqueCCs: [1, 2, 3, 4, 5, 6, 7, 8],
   midiInputs: [],
