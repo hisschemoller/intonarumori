@@ -5,6 +5,7 @@ import {
   MIDIMessage,
   MIDIMessageType,
 } from '../app/midi-types';
+import AudioData from '../interfaces/audioData';
 
 export enum MutationType {
   HandleMIDIMessage = 'HANDLE_MIDI_MESSAGE',
@@ -12,6 +13,7 @@ export enum MutationType {
   PlaySound = 'PLAY_SOUND',
   Reset = 'RESET',
   SelectMIDIInput = 'SELECT_MIDI_INPUT',
+  SetAudioData = 'SET_AUDIO_DATA',
   SetBluetoothStatus = 'SET_BLUETOOTH_STATUS',
   ToggleControls = 'TOGGLE_CONTROLS',
   ToggleSettings = 'TOGGLE_SETTINGS',
@@ -24,6 +26,7 @@ export type Mutations = {
   [MutationType.PlaySound](state: State, message: MIDIMessage): void;
   [MutationType.Reset](state: State): void;
   [MutationType.SelectMIDIInput](state: State, name: string): void;
+  [MutationType.SetAudioData](state: State, data: AudioData[]): void;
   [MutationType.SetBluetoothStatus](state: State, status: number): void;
   [MutationType.ToggleControls](state: State, isVisible: boolean): void;
   [MutationType.ToggleSettings](state: State, isVisible: boolean): void;
@@ -102,6 +105,9 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationType.SelectMIDIInput](state, name) {
     state.midiSelectedInput = name;
+  },
+  [MutationType.SetAudioData](state, data) {
+    state.audioData = data;
   },
   [MutationType.SetBluetoothStatus](state, status) {
     state.bluetoothStatus = status;

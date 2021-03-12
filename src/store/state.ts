@@ -1,3 +1,4 @@
+import AudioData from '../interfaces/audioData';
 import { MIDIMessage } from '../app/midi-types';
 import { BumpwheelDataType } from '../world/populations/bumpwheel-data-type';
 
@@ -7,6 +8,8 @@ export interface NormalizedObjects<T> {
 }
 
 export type State = {
+  audioData: AudioData[];
+  audioDataIndex: number;
   bluetoothStatus: number;
   isControlsVisible: boolean;
   isSettingsVisible: boolean;
@@ -21,6 +24,8 @@ export type State = {
 };
 
 export const state: State = {
+  audioData: [],
+  audioDataIndex: 0,
   bluetoothStatus: 0,
   isControlsVisible: false,
   isSettingsVisible: true,

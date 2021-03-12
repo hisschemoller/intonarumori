@@ -9,7 +9,9 @@ import {
 } from 'standardized-audio-context';
 import { useStore } from '../store';
 import { State } from '../store/state';
+import { ActionType } from '../store/actions';
 import { MIDIMessage } from './midi-types';
+import AudioData from '../interfaces/audioData';
 
 type Voice = {
   isPlaying: boolean;
@@ -53,9 +55,10 @@ function createVoices() {
   }
 }
 
-function loadAudioFiles() {
-  audioFileNames.forEach((audioFileName, index) => {
-    fetch(`audio/${audioFileName}`).then((response) => {
+function loadAudioFiles(audioData: AudioData) {
+  audioData.files.forEach((audioFileName, index) => {
+    console.log(audioFileName);
+    fetch(audioFileName).then((response) => {
       if (response.status === 200) {
         response.arrayBuffer().then((arrayBuffer) => {
           audioCtx.decodeAudioData(arrayBuffer,
@@ -101,16 +104,23 @@ function playSound(midiMessage: MIDIMessage): void {
 // eslint-disable-next-line import/prefer-default-export
 export function setup(): void {
   store = useStore();
+
   const settingsVisibleRef = computed(() => store.state.isSettingsVisible);
   watch(settingsVisibleRef, () => {
     if (!audioCtx) {
       audioCtx = new AudioContext();
-      loadAudioFiles();
+      store.dispatch(ActionType.LoadAudioData);
       createVoices();
     }
   });
+
   const midiSoundMessageRef = computed(() => store.state.midiSoundMessage);
   watch(midiSoundMessageRef, () => {
     playSound(store.state.midiSoundMessage);
+  });
+
+  const audioDataRef = computed(() => store.state.audioData);
+  watch(audioDataRef, () => {
+    loadAudioFiles(store.state.audioData[store.state.audioDataIndex]);
   });
 }
