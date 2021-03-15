@@ -15,6 +15,7 @@ export enum MutationType {
   SelectMIDIInput = 'SELECT_MIDI_INPUT',
   SetAudioData = 'SET_AUDIO_DATA',
   SetBluetoothStatus = 'SET_BLUETOOTH_STATUS',
+  SetSelectedSoundset = 'SET_SELECTED_SOUNDSET',
   ToggleControls = 'TOGGLE_CONTROLS',
   ToggleSettings = 'TOGGLE_SETTINGS',
   UpdateMIDIPorts = 'UPDATE_MIDI_PORTS',
@@ -28,6 +29,7 @@ export type Mutations = {
   [MutationType.SelectMIDIInput](state: State, name: string): void;
   [MutationType.SetAudioData](state: State, data: AudioData[]): void;
   [MutationType.SetBluetoothStatus](state: State, status: number): void;
+  [MutationType.SetSelectedSoundset](state: State, index: number): void;
   [MutationType.ToggleControls](state: State, isVisible: boolean): void;
   [MutationType.ToggleSettings](state: State, isVisible: boolean): void;
   [MutationType.UpdateMIDIPorts](state: State, midiInputs: string[]): void;
@@ -111,6 +113,10 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationType.SetBluetoothStatus](state, status) {
     state.bluetoothStatus = status;
+  },
+  [MutationType.SetSelectedSoundset](state, index) {
+    console.log(index);
+    state.audioDataIndex = index;
   },
   [MutationType.ToggleControls](state, isVisible) {
     state.isControlsVisible = isVisible;

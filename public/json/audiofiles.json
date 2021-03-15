@@ -1,6 +1,19 @@
 [
   {
-    "title": "Gamelan",
+    "title": "Acoustic Guitar",
+    "files": [
+      "audio/153956__carlos-vaquero__classical-guitar-c-6-plucked-non-vibrato.wav",
+      "audio/153958__carlos-vaquero__classical-guitar-d-6-plucked-non-vibrato.wav",
+      "audio/153960__carlos-vaquero__classical-guitar-e-6-plucked-non-vibrato.wav",
+      "audio/153961__carlos-vaquero__classical-guitar-f-6-plucked-non-vibrato.wav",
+      "audio/153963__carlos-vaquero__classical-guitar-g-6-plucked-non-vibrato.wav",
+      "audio/153965__carlos-vaquero__classical-guitar-a-6-plucked-non-vibrato.wav",
+      "audio/153967__carlos-vaquero__classical-guitar-b-6-plucked-non-vibrato.wav",
+      "audio/153969__carlos-vaquero__classical-guitar-c-7-plucked-non-vibrato.wav"
+    ]
+  },
+  {
+    "title": "Indonesian Gamelan",
     "files": [
       "audio/24611__anamorphosis__gmb-ceng-ceng.wav",
       "audio/kemong.wav",

@@ -6,6 +6,11 @@
     position="bottom"
   >
     <div class="p-d-flex p-jc-center">
+      <Listbox
+        :options="audioData"
+        optionLabel="title"
+        v-model="audioDataIndex"
+      />
       <Control
         v-for="(wheel, index) in wheels"
         :key="index"
@@ -17,8 +22,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, toRefs } from 'vue';
 import Sidebar from 'primevue/sidebar';
+import Listbox from 'primevue/listbox';
 import { useStore } from '../store';
 import { MutationType } from '../store/mutations';
 import Control from './Control.vue';
@@ -26,6 +32,7 @@ import Control from './Control.vue';
 export default defineComponent({
   components: {
     Control,
+    Listbox,
     Sidebar,
   },
   setup() {
@@ -37,10 +44,20 @@ export default defineComponent({
       set: (value) => store.commit(MutationType.ToggleControls, value),
     });
 
-    // controls
-    const { wheels } = store.state;
+    // audioData
+    const audioDataIndex = computed({
+      get: () => store.state.audioData[store.state.audioDataIndex],
+      set: (value) => store.commit(
+        MutationType.SetSelectedSoundset, store.state.audioData.indexOf(value),
+      ),
+    });
 
-    return { isVisible, wheels };
+    // audioData, controls
+    const { audioData, wheels } = toRefs(store.state);
+
+    return {
+      audioData, audioDataIndex, isVisible, wheels,
+    };
   },
 });
 

@@ -21,16 +21,6 @@ type Voice = {
 };
 
 const numVoices = 32;
-const audioFileNames = [
-  '24611__anamorphosis__gmb-ceng-ceng.wav',
-  'kemong.wav',
-  'kempli.wav',
-  'reyongmid1.wav',
-  'reyongmid2.wav',
-  'reyongmid3.wav',
-  'reyongmid5.wav',
-  'reyongmid6.wav',
-];
 const buffers: AudioBuffer[] = [];
 const voices: Voice[] = [];
 let voiceIndex = 0;
@@ -57,7 +47,6 @@ function createVoices() {
 
 function loadAudioFiles(audioData: AudioData) {
   audioData.files.forEach((audioFileName, index) => {
-    console.log(audioFileName);
     fetch(audioFileName).then((response) => {
       if (response.status === 200) {
         response.arrayBuffer().then((arrayBuffer) => {
@@ -121,6 +110,13 @@ export function setup(): void {
 
   const audioDataRef = computed(() => store.state.audioData);
   watch(audioDataRef, () => {
+    console.log(store.state.audioDataIndex, store.state.audioData);
+    loadAudioFiles(store.state.audioData[store.state.audioDataIndex]);
+  });
+
+  const audioDataIndexRef = computed(() => store.state.audioDataIndex);
+  watch(audioDataIndexRef, () => {
+    console.log(store.state.audioDataIndex, store.state.audioData);
     loadAudioFiles(store.state.audioData[store.state.audioDataIndex]);
   });
 }
