@@ -38,7 +38,7 @@ Only common MIDI messages are used however, so other MIDI controllers can be use
 ## Machine #1
 
 <div style="max-width:648px;">
-  <img src="assets/img/machine1.jpg" alt="Machine 1" title="Machine 1" />
+  <img src="assets/img/machine1_1.jpg" alt="Machine 1" title="Machine 1" />
 </div>
 
 Demo online here: [https://www.hisschemoller.com/intonarumori/1/](https://www.hisschemoller.com/intonarumori/1/)
