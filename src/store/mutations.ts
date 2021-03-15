@@ -1,6 +1,7 @@
 import { MutationTree } from 'vuex';
 import { State } from './state';
 import {
+  KiboMIDIKnobClickCC,
   KiboMIDINotes,
   MIDIMessage,
   MIDIMessageType,
@@ -44,6 +45,8 @@ export const mutations: MutationTree<State> & Mutations = {
           state.wheels[state.midiTorqueCCs.indexOf(data0)].torqueControl = data1;
         } else if (state.midiHingeCCs.indexOf(data0) !== -1) {
           state.wheels[state.midiHingeCCs.indexOf(data0)].hingeControl = data1;
+        } else if (data0 === KiboMIDIKnobClickCC && data1 === 127) {
+          state.audioDataIndex = (state.audioDataIndex + 1) % state.audioData.length;
         }
         break;
 
