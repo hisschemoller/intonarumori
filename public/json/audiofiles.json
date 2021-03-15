@@ -13,6 +13,32 @@
     ]
   },
   {
+    "title": "Music Box",
+    "files": [
+      "audio/70179__folkman__music-box-c-1.wav",
+      "audio/70182__folkman__music-box-d-2.wav",
+      "audio/70185__folkman__music-box-e-2.wav",
+      "audio/70187__folkman__music-box-f-2.wav",
+      "audio/70188__folkman__music-box-g-2.wav",
+      "audio/70176__folkman__music-box-a-2.wav",
+      "audio/70178__folkman__music-box-b-2.wav",
+      "audio/70180__folkman__music-box-c-2.wav"
+    ]
+  },
+  {
+    "title": "Bassoon with vibrato",
+    "files": [
+      "audio/154341__carlos-vaquero__bassoon-c-3-tenuto-vibrato.wav",
+      "audio/154343__carlos-vaquero__bassoon-d-3-tenuto-vibrato.wav",
+      "audio/154345__carlos-vaquero__bassoon-e-3-tenuto-vibrato.wav",
+      "audio/154346__carlos-vaquero__bassoon-f-3-tenuto-vibrato.wav",
+      "audio/154348__carlos-vaquero__bassoon-g-3-tenuto-vibrato.wav",
+      "audio/154350__carlos-vaquero__bassoon-a-3-tenuto-vibrato.wav",
+      "audio/154352__carlos-vaquero__bassoon-b-3-tenuto-vibrato.wav",
+      "audio/154353__carlos-vaquero__bassoon-c-4-tenuto-vibrato.wav"
+    ]
+  },
+  {
     "title": "Indonesian Gamelan",
     "files": [
       "audio/24611__anamorphosis__gmb-ceng-ceng.wav",
