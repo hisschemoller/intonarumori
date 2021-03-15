@@ -1,7 +1,10 @@
 <template>
-<Dialog header="Intonarumori" v-model:visible="isVisible">
-  <div class="p-text-left">Intonarumori uses 3D and physics to generate sound. Use the settings
-    below to connect a MIDI controller via USB or Bluetooth.</div>
+<Dialog header="Intonarumori 1" v-model:visible="isVisible">
+  <div class="p-text-left">Eight wheels spin at different speeds to create forever changing
+    patterns. Connect a MIDI controller via USB or Bluetooth below. Read the <a
+    href="https://github.com/hisschemoller/intonarumori/blob/master/README.md" target="_blank">user
+    guide online</a>.
+  </div>
   <div class="p-grid">
     <div class="p-col-12 p-sm-6 p-d-flex p-flex-column">
       <div class="subheader">Bluetooth</div>

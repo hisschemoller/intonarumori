@@ -75,11 +75,19 @@ export default defineComponent({
 
 </script>
 
-<style scoped>
-.p-sidebar-bottom {
+<style>
+#app .p-sidebar-bottom {
   height: 18rem;
 }
-.p-tabview {
-  width: 325px;
+#app .p-tabview {
+  width: 286px;
+}
+#app .p-tabview-panels {
+  padding-left: 0;
+  padding-right: 0;
+}
+#app .p-listbox-item {
+  padding-bottom: 0.7rem;
+  padding-top: 0.7rem;
 }
 </style>

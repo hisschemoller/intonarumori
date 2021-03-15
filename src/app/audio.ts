@@ -110,13 +110,11 @@ export function setup(): void {
 
   const audioDataRef = computed(() => store.state.audioData);
   watch(audioDataRef, () => {
-    console.log(store.state.audioDataIndex, store.state.audioData);
     loadAudioFiles(store.state.audioData[store.state.audioDataIndex]);
   });
 
   const audioDataIndexRef = computed(() => store.state.audioDataIndex);
   watch(audioDataIndexRef, () => {
-    console.log(store.state.audioDataIndex, store.state.audioData);
     loadAudioFiles(store.state.audioData[store.state.audioDataIndex]);
   });
 }

@@ -18,7 +18,7 @@ export type MIDIMessage = {
   data1: number;
 };
 
-export const KiboMIDINotes = [60, 62, 64, 65, 67, 69, 71, 72];
+export const KiboMIDINotes: ReadonlyArray<number> = [60, 62, 64, 65, 67, 69, 71, 72];
 
 export const KiboMIDIKnobTurnCC = 117;
 
