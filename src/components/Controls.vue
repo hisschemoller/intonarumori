@@ -6,17 +6,25 @@
     position="bottom"
   >
     <div class="p-d-flex p-jc-center">
-      <Listbox
-        :options="audioData"
-        optionLabel="title"
-        v-model="audioDataIndex"
-      />
-      <Control
-        v-for="(wheel, index) in wheels"
-        :key="index"
-        :index="index"
-        class="p-ml-0 p-mr-0 p-flex-column"
-      />
+      <TabView>
+        <TabPanel header="Controls">
+          <div class="p-d-flex p-jc-center">
+          <Control
+            v-for="(wheel, index) in wheels"
+            :key="index"
+            :index="index"
+            class="p-ml-0 p-mr-0 p-flex-column"
+          />
+          </div>
+        </TabPanel>
+        <TabPanel header="Sounds">
+            <Listbox
+              :options="audioData"
+              optionLabel="title"
+              v-model="audioDataIndex"
+            />
+        </TabPanel>
+      </TabView>
     </div>
   </Sidebar>
 </template>
@@ -25,6 +33,8 @@
 import { computed, defineComponent, toRefs } from 'vue';
 import Sidebar from 'primevue/sidebar';
 import Listbox from 'primevue/listbox';
+import TabPanel from 'primevue/tabpanel';
+import TabView from 'primevue/tabview';
 import { useStore } from '../store';
 import { MutationType } from '../store/mutations';
 import Control from './Control.vue';
@@ -34,6 +44,8 @@ export default defineComponent({
     Control,
     Listbox,
     Sidebar,
+    TabPanel,
+    TabView,
   },
   setup() {
     const store = useStore();
@@ -65,6 +77,9 @@ export default defineComponent({
 
 <style scoped>
 .p-sidebar-bottom {
-  height: 15rem;
+  height: 18rem;
+}
+.p-tabview {
+  width: 325px;
 }
 </style>
