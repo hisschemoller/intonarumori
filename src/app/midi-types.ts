@@ -3,7 +3,7 @@ export enum MIDIMessageType {
   NOTE_ON = 144, // 0x90
   POLY_KEY_PRESSURE = 160, // 0xA0
   CONTROL_CHANGE = 176, // 0xB0
-  PROGRAM_CHANGE = 176, // 0xC0
+  PROGRAM_CHANGE = 192, // 0xC0
   SYSTEM_REALTIME = 240,
   REALTIME_CLOCK = 248,
   REALTIME_START = 250,
@@ -17,3 +17,11 @@ export type MIDIMessage = {
   data0: number;
   data1: number;
 };
+
+export const KiboMIDINotes: ReadonlyArray<number> = [60, 62, 64, 65, 67, 69, 71, 72];
+
+export const KiboMIDIKnobTurnCC = 117;
+
+export const KiboMIDIKnobDoubleClickCC = 118;
+
+export const KiboMIDIKnobClickCC = 119;
