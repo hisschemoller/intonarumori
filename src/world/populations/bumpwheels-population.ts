@@ -16,6 +16,8 @@ export default class BumpwheelPopulation extends Population {
 
   private wheels: Bumpwheel[] = [];
 
+  private backgroundColor = 0xbbddff;
+
   constructor(scene: Scene, physicsWorld: Ammo.btDiscreteDynamicsWorld) {
     super(physicsWorld);
     this.store = useStore();
@@ -59,6 +61,13 @@ export default class BumpwheelPopulation extends Population {
         }
       }
     }
+  }
+
+  /**
+   * Provide the background clearColor for the renderer.
+   */
+  getBackgroundColor(): number {
+    return this.backgroundColor;
   }
 
   /**

@@ -16,8 +16,8 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { step } from './physics';
 import addWindowResizeCallback from '../utils/windowresize';
-import BumpwheelPopulation from './populations/bumpwheels-population';
 import PopulationInterface from './population-interface';
+import SecondPopulation from './populations/second-population';
 
 const FOV = 45;
 const PLANE_ASPECT_RATIO = 16 / 9;
@@ -145,7 +145,9 @@ export default function setup(
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
 ): void {
   setupWebGLWorld(rootEl);
-  population = new BumpwheelPopulation(scene, physicsWorld);
+  population = new SecondPopulation(scene, physicsWorld);
+  renderer.setClearColor(population.getBackgroundColor());
+  scene.background = new Color(population.getBackgroundColor());
   addWindowResizeCallback(onWindowResize);
   onWindowResize();
   draw();

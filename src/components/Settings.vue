@@ -1,7 +1,6 @@
 <template>
-<Dialog header="Intonarumori 1" v-model:visible="isVisible">
-  <div class="p-text-left">Eight wheels spin at different speeds to create forever changing
-    patterns. Connect a MIDI controller via USB or Bluetooth below. Read the <a
+<Dialog header="Intonarumori 2" v-model:visible="isVisible">
+  <div class="p-text-left">Second machine. Read the <a
     href="https://github.com/hisschemoller/intonarumori/blob/master/README.md" target="_blank">user
     guide online</a>.
   </div>
@@ -20,10 +19,6 @@
       ></Dropdown>
       <div class="status">Status</div>
     </div>
-    <!-- <div class="p-col-12 p-d-flex p-ai-center">
-      <Button @click="reset" class="p-mr-2">Reset</Button>
-      Clear all data and start fresh.
-    </div> -->
   </div>
   <template #footer>
     <Button label="Close" icon="pi pi-check" autofocus @click="isVisible = false" />
@@ -77,18 +72,12 @@ export default defineComponent({
       }
     });
 
-    // reset
-    // const reset = () => {
-    //   store.commit(MutationType.Reset, undefined);
-    // };
-
     return {
       bluetoothMessage,
       connectBLE,
       isVisible,
       midiInputNames,
       midiSelectedInput,
-      // reset,
     };
   },
 });
