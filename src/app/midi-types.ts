@@ -20,6 +20,8 @@ export type MIDIMessage = {
 
 export const KiboMIDINotes: ReadonlyArray<number> = [60, 62, 64, 65, 67, 69, 71, 72];
 
+export const KiboMIDICCs: ReadonlyArray<number> = [102, 103, 104, 105, 106, 107, 108, 109];
+
 export const KiboMIDIKnobTurnCC = 117;
 
 export const KiboMIDIKnobDoubleClickCC = 118;

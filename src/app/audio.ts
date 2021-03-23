@@ -77,7 +77,7 @@ function playSound(midiMessage: MIDIMessage): void {
     voice.isPlaying = true;
     voice.gain.gain.setValueAtTime(midiMessage.data1 / 255, startTime);
     voice.panner.pan.setValueAtTime(
-      ((index / store.state.wheels.length) * 2) - 1,
+      ((index / store.state.bumpers.length) * 2) - 1,
       startTime,
     );
     voice.source = audioCtx.createBufferSource();

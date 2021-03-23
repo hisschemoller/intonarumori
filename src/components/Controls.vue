@@ -9,12 +9,6 @@
       <TabView>
         <TabPanel header="Controls">
           <div class="p-d-flex p-jc-center">
-          <Control
-            v-for="(wheel, index) in wheels"
-            :key="index"
-            :index="index"
-            class="p-ml-0 p-mr-0 p-flex-column"
-          />
           </div>
         </TabPanel>
         <TabPanel header="Sounds">
@@ -37,11 +31,9 @@ import TabPanel from 'primevue/tabpanel';
 import TabView from 'primevue/tabview';
 import { useStore } from '../store';
 import { MutationType } from '../store/mutations';
-import Control from './Control.vue';
 
 export default defineComponent({
   components: {
-    Control,
     Listbox,
     Sidebar,
     TabPanel,
@@ -65,10 +57,10 @@ export default defineComponent({
     });
 
     // audioData, controls
-    const { audioData, wheels } = toRefs(store.state);
+    const { audioData } = toRefs(store.state);
 
     return {
-      audioData, audioDataIndex, isVisible, wheels,
+      audioData, audioDataIndex, isVisible,
     };
   },
 });

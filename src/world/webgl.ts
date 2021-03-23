@@ -17,7 +17,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { step } from './physics';
 import addWindowResizeCallback from '../utils/windowresize';
 import PopulationInterface from './population-interface';
-import SecondPopulation from './populations/second-population';
+import BumpersPopulation from './populations/bumpers-population';
 
 const FOV = 45;
 const PLANE_ASPECT_RATIO = 16 / 9;
@@ -98,8 +98,8 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
 
   camera = new PerspectiveCamera(FOV, 1, 1, 500);
   camera.name = 'camera';
-  camera.position.set(10, 4, 6);
-  camera.lookAt(new Vector3(0, 0, 0));
+  camera.position.set(-3, 4, 10);
+  camera.lookAt(new Vector3(0, 2, 0));
   scene.add(camera);
 
   // AMBIENT LIGHT
@@ -145,7 +145,8 @@ export default function setup(
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
 ): void {
   setupWebGLWorld(rootEl);
-  population = new SecondPopulation(scene, physicsWorld);
+  addHelpers();
+  population = new BumpersPopulation(scene, physicsWorld);
   renderer.setClearColor(population.getBackgroundColor());
   scene.background = new Color(population.getBackgroundColor());
   addWindowResizeCallback(onWindowResize);
