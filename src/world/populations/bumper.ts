@@ -19,6 +19,10 @@ export default class Bumper {
 
   private slider!: Ammo.btSliderConstraint;
 
+  private impulse: Ammo.btVector3;
+
+  private previousVelocity: number;
+
   private index: number;
 
   constructor(
@@ -30,6 +34,8 @@ export default class Bumper {
   ) {
     this.store = useStore();
     this.index = index;
+    this.impulse = new Ammo.btVector3(0, 0, 0);
+    this.previousVelocity = 0;
     this.create(scene, physicsWorld, position, fixedBody);
     this.setupListener();
   }
@@ -47,10 +53,11 @@ export default class Bumper {
     const color = 0xff3300 + ((this.index * 0x14) << 8);
 
     const tube = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 1, h: 3, d: 1, py: 0, c: color,
+      w: 1, h: 3, d: 1, py: 10, c: color,
     }));
     this.meshes.push(tube);
     this.tubeBody = tube.userData.physicsBody;
+    this.tubeBody.setActivationState(4);
 
     const localA = new Ammo.btTransform();
     const localB = new Ammo.btTransform();
@@ -70,7 +77,7 @@ export default class Bumper {
       true,
     );
     this.slider.setLowerLinLimit(0);
-    this.slider.setUpperLinLimit(0.5);
+    this.slider.setUpperLinLimit(4);
     this.slider.setLowerAngLimit(0);
     this.slider.setUpperAngLimit(0);
     physicsWorld.addConstraint(this.slider, true);
@@ -87,11 +94,19 @@ export default class Bumper {
    * Add listener to changes in the app state.
    */
   private setupListener() {
-    const isPressedRef = computed(
+    const velocityRef = computed(
       () => this.store.state.bumpers[this.index].kiboPadVelocity,
     );
-    watch(isPressedRef, () => {
-      // this.setEnabled(isEnabledRef.value === 127);
+    watch(velocityRef, () => {
+      this.handleVelocity(velocityRef.value);
     });
+  }
+
+  private handleVelocity(velocity: number) {
+    if (velocity > 0 && this.previousVelocity === 0) {
+      this.impulse.setY((velocity / 127) * 10);
+      this.tubeBody.applyCentralImpulse(this.impulse);
+    }
+    this.previousVelocity = velocity;
   }
 }

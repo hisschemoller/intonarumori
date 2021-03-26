@@ -46,11 +46,4 @@ export default class SecondPopulation extends Population {
       this.meshes = [...this.meshes, ...bumper.getMeshes()];
     });
   }
-
-  /**
-   * Update after each step, received from webgl.draw()
-   */
-  update(): void {
-    super.update();
-  }
 }

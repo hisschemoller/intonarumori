@@ -44,7 +44,8 @@ export const mutations: MutationTree<State> & Mutations = {
         // eslint-disable-next-line no-case-declarations
         const index = KiboMIDINotes.indexOf(data0);
         if (index !== -1) {
-          state.bumpers[index].isKiboPadPressed = type === MIDIMessageType.NOTE_ON;
+          // state.bumpers[index].isKiboPadPressed = type === MIDIMessageType.NOTE_ON;
+          state.bumpers[index].kiboPadVelocity = data1;
         }
         break;
       }
