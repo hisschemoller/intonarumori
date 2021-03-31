@@ -20,6 +20,7 @@
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/resize-observer-browser": "^0.1.5",
     "@types/web-bluetooth": "^0.0.9",
     "@types/webaudioapi": "^0.0.27",
     "@types/webmidi": "^2.0.4",

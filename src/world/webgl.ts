@@ -15,13 +15,13 @@ import {
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { step } from './physics';
-import addWindowResizeCallback from '../utils/windowresize';
 import PopulationInterface from './population-interface';
 import BumpersPopulation from './populations/bumpers-population';
 
 const FOV = 45;
 const PLANE_ASPECT_RATIO = 16 / 9;
 
+let rootEl: HTMLDivElement;
 let renderer: WebGLRenderer;
 let clock: Clock;
 let scene: Scene;
@@ -59,8 +59,8 @@ function draw() {
  * -really-battling-to-explain-this-one/17574/9
  */
 function onWindowResize() {
-  renderer.setSize(window.innerWidth, window.innerHeight, true);
-  camera.aspect = window.innerWidth / window.innerHeight;
+  renderer.setSize(rootEl.offsetWidth, rootEl.offsetHeight, true);
+  camera.aspect = rootEl.offsetWidth / rootEl.offsetHeight;
 
   if (camera.aspect > PLANE_ASPECT_RATIO) {
     // window large enough
@@ -83,7 +83,7 @@ function onWindowResize() {
 /**
  * Create the 3D scene, lights, cameras.
  */
-function setupWebGLWorld(rootEl: HTMLDivElement) {
+function setupWebGLWorld() {
   renderer = new WebGLRenderer({ antialias: true });
   renderer.setClearColor(0xbbddff);
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -137,19 +137,37 @@ function setupWebGLWorld(rootEl: HTMLDivElement) {
   orbitControls.enabled = true;
 }
 
+function setupResizeObserver() {
+  const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
+    entries.forEach((entry: ResizeObserverEntry) => {
+      if (entry.contentBoxSize) {
+        if (entry.contentBoxSize) {
+          // Firefox implements `contentBoxSize` as a single content rect, rather than an array.
+          const contentBoxSize = Array.isArray(entry.contentBoxSize)
+            ? entry.contentBoxSize[0] : entry.contentBoxSize;
+          console.log('Size changed', contentBoxSize);
+          onWindowResize();
+        }
+      }
+    });
+  });
+  resizeObserver.observe(rootEl);
+}
+
 /**
  * General setup of the module.
  */
 export default function setup(
-  rootEl: HTMLDivElement,
+  rootElm: HTMLDivElement,
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
 ): void {
-  setupWebGLWorld(rootEl);
+  rootEl = rootElm;
+  setupWebGLWorld();
   addHelpers();
   population = new BumpersPopulation(scene, physicsWorld);
   renderer.setClearColor(population.getBackgroundColor());
   scene.background = new Color(population.getBackgroundColor());
-  addWindowResizeCallback(onWindowResize);
+  setupResizeObserver();
   onWindowResize();
   draw();
 }
