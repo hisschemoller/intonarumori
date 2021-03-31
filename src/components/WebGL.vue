@@ -21,9 +21,10 @@ export default defineComponent({
 
 <style scoped>
 .canvas-container {
+  bottom: 0;
+  left: 0;
   right: 0;
   position: absolute;
   top: 0;
-  z-index: -1;
 }
 </style>

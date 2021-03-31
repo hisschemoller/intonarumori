@@ -1,6 +1,12 @@
 <template>
-  <WebGL />
-  <Controls />
+  <Dashboard>
+    <template v-slot:main>
+      <WebGL />
+    </template>
+    <template v-slot:sidebar>
+      <Controls />
+    </template>
+  </Dashboard>
   <Navigation />
   <Settings />
 </template>
@@ -10,6 +16,7 @@ import { Options, Vue } from 'vue-class-component';
 import { mapMutations } from 'vuex';
 import { MutationType } from './store/mutations';
 import Controls from './components/Controls.vue';
+import Dashboard from './components/Dashboard.vue';
 import Navigation from './components/Navigation.vue';
 import Settings from './components/Settings.vue';
 import WebGL from './components/WebGL.vue';
@@ -19,6 +26,7 @@ import { setup as setupAudio } from './app/audio';
 @Options({
   components: {
     Controls,
+    Dashboard,
     Settings,
     Navigation,
     WebGL,
