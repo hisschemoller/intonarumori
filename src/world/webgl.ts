@@ -28,6 +28,7 @@ let scene: Scene;
 let camera: PerspectiveCamera;
 let orbitControls: OrbitControls;
 let population: PopulationInterface;
+let isResize: boolean;
 
 /**
  * Grid and axes helpers.
@@ -42,23 +43,12 @@ function addHelpers() {
 }
 
 /**
- * Update the physics world and render the results in 3D.
- */
-function draw() {
-  const deltaTime = clock.getDelta();
-  step(deltaTime);
-  population.update();
-  renderer.render(scene, camera);
-  requestAnimationFrame(draw);
-}
-
-/**
- * Window resize event handler.
+ * Root element resize event handler.
  * We have an actual width and a target width and want to move the camera back to cover the width.
  * https://discourse.threejs.org/t/keeping-an-object-scaled-based-on-the-bounds-of-the-canvas
  * -really-battling-to-explain-this-one/17574/9
  */
-function onWindowResize() {
+function onCanvasResize() {
   renderer.setSize(rootEl.offsetWidth, rootEl.offsetHeight, true);
   camera.aspect = rootEl.offsetWidth / rootEl.offsetHeight;
 
@@ -72,12 +62,26 @@ function onWindowResize() {
     const newCameraHeight = cameraHeight / ratio;
     camera.fov = MathUtils.radToDeg(Math.atan(newCameraHeight)) * 2;
   }
-
   camera.updateProjectionMatrix();
 
   if (orbitControls) {
     orbitControls.update();
   }
+}
+
+/**
+ * Update the physics world and render the results in 3D.
+ */
+function draw() {
+  if (isResize) {
+    isResize = false;
+    onCanvasResize();
+  }
+  const deltaTime = clock.getDelta();
+  step(deltaTime);
+  population.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(draw);
 }
 
 /**
@@ -140,14 +144,8 @@ function setupWebGLWorld() {
 function setupResizeObserver() {
   const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
     entries.forEach((entry: ResizeObserverEntry) => {
-      if (entry.contentBoxSize) {
-        if (entry.contentBoxSize) {
-          // Firefox implements `contentBoxSize` as a single content rect, rather than an array.
-          const contentBoxSize = Array.isArray(entry.contentBoxSize)
-            ? entry.contentBoxSize[0] : entry.contentBoxSize;
-          console.log('Size changed', contentBoxSize);
-          onWindowResize();
-        }
+      if (entry.contentBoxSize && entry.target === rootEl) {
+        isResize = true;
       }
     });
   });
@@ -162,12 +160,13 @@ export default function setup(
   physicsWorld: Ammo.btDiscreteDynamicsWorld,
 ): void {
   rootEl = rootElm;
+  isResize = false;
   setupWebGLWorld();
   addHelpers();
   population = new BumpersPopulation(scene, physicsWorld);
   renderer.setClearColor(population.getBackgroundColor());
   scene.background = new Color(population.getBackgroundColor());
   setupResizeObserver();
-  onWindowResize();
+  onCanvasResize();
   draw();
 }

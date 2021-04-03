@@ -59,14 +59,14 @@ export default defineComponent({
     position: relative;
   }
   .dashboard-sidebar {
-    /* flex-basis: 0; */
     flex-grow: 0;
     height: 0;
     position: relative;
+    transition: height 0.2s ease-out;
   }
   .dashboard-sidebar.show {
-    /* flex-basis: 18rem; */
     height: 18rem;
+    transition: height 0.2s ease-in;
   }
   .dashboard-sidebar-close {
     position: absolute;
