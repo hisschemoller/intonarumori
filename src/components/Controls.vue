@@ -1,9 +1,8 @@
 <template>
   <div class="p-d-flex p-jc-center">
     <TabView>
-      <TabPanel header="Controls">
-        <div class="p-d-flex p-jc-center">
-        </div>
+      <TabPanel header="Pads">
+        <Pads />
       </TabPanel>
       <TabPanel header="Sounds">
           <Listbox
@@ -23,10 +22,12 @@ import TabPanel from 'primevue/tabpanel';
 import TabView from 'primevue/tabview';
 import { useStore } from '../store';
 import { MutationType } from '../store/mutations';
+import Pads from './Pads.vue';
 
 export default defineComponent({
   components: {
     Listbox,
+    Pads,
     TabPanel,
     TabView,
   },

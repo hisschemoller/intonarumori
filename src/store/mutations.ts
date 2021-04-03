@@ -18,6 +18,7 @@ export enum MutationType {
   SetSelectedSoundset = 'SET_SELECTED_SOUNDSET',
   ToggleControls = 'TOGGLE_CONTROLS',
   ToggleSettings = 'TOGGLE_SETTINGS',
+  TriggerNote = 'TRIGGER_NOTE',
   UpdateMIDIPorts = 'UPDATE_MIDI_PORTS',
 }
 
@@ -32,6 +33,7 @@ export type Mutations = {
   [MutationType.SetSelectedSoundset](state: State, index: number): void;
   [MutationType.ToggleControls](state: State, isVisible: boolean): void;
   [MutationType.ToggleSettings](state: State, isVisible: boolean): void;
+  [MutationType.TriggerNote](state: State, payload: { padIndex: number; velocity: number}): void;
   [MutationType.UpdateMIDIPorts](state: State, midiInputs: string[]): void;
 }
 
@@ -88,6 +90,9 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationType.ToggleSettings](state, isVisible) {
     state.isSettingsVisible = isVisible;
+  },
+  [MutationType.TriggerNote](state, payload) {
+    state.bumpers[payload.padIndex].kiboPadVelocity = payload.velocity;
   },
   [MutationType.UpdateMIDIPorts](state, midiInputs) {
     state.midiInputs = midiInputs;
