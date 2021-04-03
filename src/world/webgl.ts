@@ -144,7 +144,7 @@ function setupWebGLWorld() {
 function setupResizeObserver() {
   const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
     entries.forEach((entry: ResizeObserverEntry) => {
-      if (entry.contentBoxSize && entry.target === rootEl) {
+      if (entry.target === rootEl && (entry.contentBoxSize || entry.contentRect)) {
         isResize = true;
       }
     });
