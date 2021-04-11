@@ -1,5 +1,5 @@
 <template>
-  <div class="p-d-flex p-jc-center">
+  <div class="p-d-flex p-jc-center p-pt-4">
     <TabView>
       <TabPanel header="Pads">
         <Pads />

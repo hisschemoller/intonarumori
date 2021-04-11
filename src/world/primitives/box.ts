@@ -26,9 +26,8 @@ export default function createBox(
     color, mass, position: pos, quaternion: quat, size,
   } = config;
 
-  const geometry = new BoxBufferGeometry(size.w, size.h, size.d);
   const box = new Mesh(
-    geometry,
+    new BoxBufferGeometry(size.w, size.h, size.d),
     new MeshPhongMaterial({ color }),
   );
   box.position.set(pos.x, pos.y, pos.z);

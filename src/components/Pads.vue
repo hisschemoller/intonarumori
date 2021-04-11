@@ -4,6 +4,7 @@
       class="pad"
       v-for="(bumper, index) in bumpers"
       :key="index"
+      :class="bumper.kiboPadVelocity > 0 ? 'pad--active' : ''"
       @mousedown="onMouseEvent(index, 100)"
       @mouseup="onMouseEvent(index, 0)">
     </div>
@@ -54,12 +55,18 @@ export default defineComponent({
 
 <style scoped>
   .pad {
-    background-color: var(--blue-100);
+    background-color: var(--indigo-100);
     border: 2px solid #fff;
     cursor: pointer;
     display: flex;
     height: 70px;
+    outline: none;
     text-align: center;
+    transition: background-color 0.2s linear;
     width: 25%;
+  }
+  .pad--active {
+    background-color: var(--indigo-200);
+    transition: background-color 0.01s linear;
   }
 </style>

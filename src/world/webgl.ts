@@ -102,7 +102,7 @@ function setupWebGLWorld() {
 
   camera = new PerspectiveCamera(FOV, 1, 1, 500);
   camera.name = 'camera';
-  camera.position.set(-3, 8, 8);
+  camera.position.set(-2, 2.5, 6);
   camera.lookAt(new Vector3(0, 2, 0));
   scene.add(camera);
 

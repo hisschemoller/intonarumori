@@ -1,5 +1,4 @@
 module.exports = {
-  publicPath: '/intonarumori/2/',
   chainWebpack: (config) => {
     config
       .plugin('html')
@@ -9,4 +8,6 @@ module.exports = {
         return args;
       });
   },
+  configureWebpack: {},
+  publicPath: '/intonarumori/2/',
 };

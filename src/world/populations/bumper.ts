@@ -9,13 +9,19 @@ import { useStore } from '../../store';
 import { State } from '../../store/state';
 import createBox from '../primitives/box';
 import BoxConfiguration from '../primitives/BoxConfiguration';
+import createSphere from '../primitives/sphere';
+import SphereConfiguration from '../primitives/SphereConfiguration';
 
 export default class Bumper {
   private store: Store<State>;
 
   private meshes: Object3D[] = [];
 
+  private ballBody!: Ammo.btRigidBody;
+
   private tubeBody!: Ammo.btRigidBody;
+
+  private ballSlider!: Ammo.btSliderConstraint;
 
   private slider!: Ammo.btSliderConstraint;
 
@@ -52,8 +58,57 @@ export default class Bumper {
     // eslint-disable-next-line no-bitwise
     const color = 0xff3300 + ((this.index * 0x14) << 8);
 
+    this.createTube(scene, physicsWorld, position, fixedBody, color);
+    this.createBall(scene, physicsWorld, position, fixedBody, color);
+  }
+
+  private createBall(
+    scene: Scene,
+    physicsWorld: Ammo.btDiscreteDynamicsWorld,
+    position: Vector3,
+    fixedBody: Ammo.btRigidBody,
+    color: number,
+  ): void {
+    const ball = createSphere(scene, physicsWorld, new SphereConfiguration({
+      r: 0.25, py: 1, c: color,
+    }));
+    this.meshes.push(ball);
+    this.ballBody = ball.userData.physicsBody;
+    this.ballBody.setActivationState(4);
+
+    const localA = new Ammo.btTransform();
+    const localB = new Ammo.btTransform();
+    localA.setIdentity();
+    localB.setIdentity();
+
+    // slide along x-axis is default, so rotate 90 degrees around the z-axis to slide y-axis
+    localA.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
+    localB.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
+    localA.setOrigin(new Ammo.btVector3(position.x, 0, position.z));
+    localB.setOrigin(new Ammo.btVector3(0, 0, 0));
+    this.ballSlider = new Ammo.btSliderConstraint(
+      fixedBody,
+      ball.userData.physicsBody,
+      localA,
+      localB,
+      true,
+    );
+    this.ballSlider.setLowerLinLimit(0);
+    this.ballSlider.setUpperLinLimit(4);
+    this.ballSlider.setLowerAngLimit(0);
+    this.ballSlider.setUpperAngLimit(0);
+    physicsWorld.addConstraint(this.ballSlider, true);
+  }
+
+  private createTube(
+    scene: Scene,
+    physicsWorld: Ammo.btDiscreteDynamicsWorld,
+    position: Vector3,
+    fixedBody: Ammo.btRigidBody,
+    color: number,
+  ): void {
     const tube = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 1, h: 3, d: 1, py: 10, c: color,
+      w: 0.5, h: 1, d: 0.5, px: position.x, py: 0, pz: position.z, c: color,
     }));
     this.meshes.push(tube);
     this.tubeBody = tube.userData.physicsBody;
@@ -77,7 +132,7 @@ export default class Bumper {
       true,
     );
     this.slider.setLowerLinLimit(0);
-    this.slider.setUpperLinLimit(4);
+    this.slider.setUpperLinLimit(1);
     this.slider.setLowerAngLimit(0);
     this.slider.setUpperAngLimit(0);
     physicsWorld.addConstraint(this.slider, true);
@@ -104,7 +159,7 @@ export default class Bumper {
 
   private handleVelocity(velocity: number) {
     if (velocity > 0 && this.previousVelocity === 0) {
-      this.impulse.setY((velocity / 127) * 10);
+      this.impulse.setY((velocity / 127) * 8);
       this.tubeBody.applyCentralImpulse(this.impulse);
     }
     this.previousVelocity = velocity;
