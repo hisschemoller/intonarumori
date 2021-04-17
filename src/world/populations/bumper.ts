@@ -69,12 +69,11 @@ export default class Bumper {
     fixedBody: Ammo.btRigidBody,
     color: number,
   ): void {
+    const { x, y, z } = position;
     const ball = createSphere(scene, physicsWorld, new SphereConfiguration({
-      r: 0.25, py: 1, c: color,
+      r: 0.25, px: x, py: y + 1, pz: z, c: color, m: 0.1,
     }));
     this.meshes.push(ball);
-    this.ballBody = ball.userData.physicsBody;
-    this.ballBody.setActivationState(4);
 
     const localA = new Ammo.btTransform();
     const localB = new Ammo.btTransform();
@@ -84,7 +83,7 @@ export default class Bumper {
     // slide along x-axis is default, so rotate 90 degrees around the z-axis to slide y-axis
     localA.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
     localB.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
-    localA.setOrigin(new Ammo.btVector3(position.x, 0, position.z));
+    localA.setOrigin(new Ammo.btVector3(x, y, z));
     localB.setOrigin(new Ammo.btVector3(0, 0, 0));
     this.ballSlider = new Ammo.btSliderConstraint(
       fixedBody,
@@ -107,8 +106,9 @@ export default class Bumper {
     fixedBody: Ammo.btRigidBody,
     color: number,
   ): void {
+    const { x, y, z } = position;
     const tube = createBox(scene, physicsWorld, new BoxConfiguration({
-      w: 0.5, h: 1, d: 0.5, px: position.x, py: 0, pz: position.z, c: color,
+      w: 0.5, h: 1, d: 0.5, px: x, py: y, pz: z, c: color,
     }));
     this.meshes.push(tube);
     this.tubeBody = tube.userData.physicsBody;
@@ -122,7 +122,7 @@ export default class Bumper {
     // slide along x-axis is default, so rotate 90 degrees around the z-axis to slide y-axis
     localA.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
     localB.getBasis().setEulerZYX(0, 0, Math.PI * 0.5);
-    localA.setOrigin(new Ammo.btVector3(position.x, 0, position.z));
+    localA.setOrigin(new Ammo.btVector3(x, y, z));
     localB.setOrigin(new Ammo.btVector3(0, 0, 0));
     this.slider = new Ammo.btSliderConstraint(
       fixedBody,
