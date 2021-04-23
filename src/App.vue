@@ -1,7 +1,7 @@
 <template>
   <Dashboard>
     <template v-slot:main>
-      <WebGL />
+      <Enable3D />
     </template>
     <template v-slot:sidebar>
       <Controls />
@@ -19,7 +19,7 @@ import Controls from './components/Controls.vue';
 import Dashboard from './components/Dashboard.vue';
 import Navigation from './components/Navigation.vue';
 import Settings from './components/Settings.vue';
-import WebGL from './components/WebGL.vue';
+import Enable3D from './components/Enable3D.vue';
 import accessMIDI from './app/midi';
 import { setup as setupAudio } from './app/audio';
 
@@ -27,9 +27,9 @@ import { setup as setupAudio } from './app/audio';
   components: {
     Controls,
     Dashboard,
+    Enable3D,
     Settings,
     Navigation,
-    WebGL,
   },
   methods: {
     ...mapMutations({

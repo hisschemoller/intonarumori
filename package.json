@@ -8,13 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "ammojs-typed": "^1.0.6",
     "core-js": "^3.6.5",
+    "enable3d": "^0.21.0",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
     "primevue": "^3.3.0",
     "standardized-audio-context": "^25.1.9",
-    "three": "^0.125.2",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vuex": "^4.0.0-0"
