@@ -8,6 +8,8 @@ let rootEl: HTMLDivElement;
 class MainScene extends Scene3D {
   private fix!: ExtendedObject3D;
 
+  private wheel!: ExtendedObject3D;
+
   constructor() {
     super({ key: 'MainScene' });
   }
@@ -20,7 +22,7 @@ class MainScene extends Scene3D {
 
   async create() {
     this.warpSpeed();
-    this.camera.position.set(2, 2, 4);
+    this.camera.position.set(2, 1, 4);
 
     if (this.physics.debug) {
       // this.physics.debug.enable();
@@ -34,7 +36,11 @@ class MainScene extends Scene3D {
     const sphere0 = this.add.sphere({ z: 2, mass: 1, radius: 0.2 });
     this.physics.add.existing(sphere0);
 
-    createWheel(this);
+    this.wheel = createWheel(this, this.fix);
+  }
+
+  update() {
+    this.wheel.body.applyTorque(0, -1.5, 0);
   }
 }
 
