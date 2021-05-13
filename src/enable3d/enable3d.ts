@@ -2,6 +2,7 @@ import {
   ExtendedObject3D, Project, Scene3D, PhysicsLoader,
 } from 'enable3d';
 import createWheel from './wheel';
+import createFlag from './flag';
 
 let rootEl: HTMLDivElement;
 
@@ -32,15 +33,13 @@ class MainScene extends Scene3D {
       x: 0, y: -0.05, z: 0, mass: 0, width: 0.1, height: 0.1, depth: 0.1,
     }, { lambert: { color: 'blue' } });
 
-    // simple sphere
-    const sphere0 = this.add.sphere({ z: 2, mass: 1, radius: 0.2 });
-    this.physics.add.existing(sphere0);
-
     this.wheel = createWheel(this, this.fix);
+
+    createFlag(this, this.fix, 0.8, 1);
   }
 
   update() {
-    this.wheel.body.applyTorque(0, -1.5, 0);
+    this.wheel.body.applyTorque(0, -2.5, 0);
   }
 }
 
