@@ -1,6 +1,8 @@
 import {
   ExtendedObject3D, Project, Scene3D, PhysicsLoader, THREE,
 } from 'enable3d';
+import createWheel from './wheel';
+import createFlag from './flag';
 
 const FOV = 45;
 const PLANE_ASPECT_RATIO = 16 / 9;
@@ -11,59 +13,43 @@ let isResize: boolean;
 class MainScene extends Scene3D {
   private cam!: THREE.PerspectiveCamera;
 
-  private orbitControls?: THREE.OrbitControls;
+  private orbitControls!: THREE.OrbitControls;
+
+  private fix!: ExtendedObject3D;
+
+  private wheel!: ExtendedObject3D;
 
   constructor() {
     super({ key: 'MainScene' });
   }
 
   async init() {
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setPixelRatio(1);
     this.renderer.setSize(rootEl.offsetWidth, rootEl.offsetHeight, true);
-    this.renderer.setClearColor(0xbbddff);
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFShadowMap; // PCFSoftShadowMap
     rootEl.appendChild(this.renderer.domElement);
   }
 
   async create() {
-    // const warpSpeedContent = await this.warpSpeed('light', 'camera', 'lookAtCenter', 'ground');
-    // if (warpSpeedContent.orbitControls) {
-    //   this.orbitControls = warpSpeedContent.orbitControls;
-    // }
+    const warpSpeedContent = await this.warpSpeed();
+    if (warpSpeedContent.orbitControls) {
+      this.orbitControls = warpSpeedContent.orbitControls;
+    }
+
+    this.camera.position.set(2, 1, 4);
+
+    this.cam = this.camera as THREE.PerspectiveCamera;
 
     if (this.physics.debug) {
       // this.physics.debug.enable();
     }
 
-    // CAMERA
-    this.cam = this.camera as THREE.PerspectiveCamera;
-    this.cam.position.set(-2, 2.5, 6);
-    this.cam.lookAt(new THREE.Vector3(0, 2, 0));
+    this.fix = this.physics.add.box({
+      x: 0, y: -0.05, z: 0, mass: 0, width: 0.1, height: 0.1, depth: 0.1,
+    }, { lambert: { color: 'blue' } });
 
-    // HEMI LIGHT
-    const hemiLight = new THREE.HemisphereLight();
-    hemiLight.color.setHSL(0.6, 0.6, 0.6);
-    hemiLight.groundColor.setHSL(0.1, 1, 0.4);
-    hemiLight.position.set(0, 50, 0);
-    this.scene.add(hemiLight);
+    this.wheel = createWheel(this, this.fix);
 
-    // DIRECTIONAL LIGHT
-    const SHADOW_SIZE = 10;
-    const SHADOW_FAR = 13500;
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 1.75, 1);
-    directionalLight.position.multiplyScalar(100);
-    directionalLight.color.setHSL(0.1, 1, 0.95);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
-    directionalLight.shadow.camera.left = -SHADOW_SIZE;
-    directionalLight.shadow.camera.right = SHADOW_SIZE;
-    directionalLight.shadow.camera.top = SHADOW_SIZE;
-    directionalLight.shadow.camera.bottom = -SHADOW_SIZE;
-    directionalLight.shadow.camera.far = SHADOW_FAR;
-    this.scene.add(directionalLight);
+    createFlag(this, this.fix, 0.8, 1);
   }
 
   /**
@@ -98,6 +84,7 @@ class MainScene extends Scene3D {
       isResize = false;
       this.onCanvasResize();
     }
+    this.wheel.body.applyTorque(0, -2.5, 0);
   }
 }
 
