@@ -1,49 +1,46 @@
 import { THREE } from 'enable3d';
 
-let texture: THREE.VideoTexture;
-let video: HTMLVideoElement;
-let videoCanvasCtx: CanvasRenderingContext2D;
+const VIDEO_ASPECT = 16 / 9;
+
 let backgroundCamera: THREE.Camera;
 let backgroundScene: THREE.Scene;
+let mesh: THREE.Mesh;
+let texture: THREE.Texture;
+let video: HTMLVideoElement;
 
 /**
- * @param {Object} renderer WebGL 3D renderer.
+ * Render background.
  */
 export function renderBackground(renderer: THREE.WebGLRenderer) {
-  if (video.readyState === video.HAVE_ENOUGH_DATA) {
-    // draw video to canvas starting from upper left corner
-    videoCanvasCtx.drawImage(video, 0, 0);
-    texture.needsUpdate = true;
-  }
   renderer.render(backgroundScene, backgroundCamera);
 }
 
 /**
- * Setup.
+ * Resize background.
+ */
+export function resizeBackground(width: number, height: number) {
+  mesh.scale.set((height / width) * VIDEO_ASPECT, 1, 1);
+}
+
+/**
+ * Setup background.
  */
 export function setupBackground(videoURL: string) {
   video = document.createElement('video');
   video.src = videoURL;
+  video.loop = true;
   video.load();
   video.play();
 
-  const videoCanvas = document.createElement('canvas');
-  videoCanvas.width = 640;
-  videoCanvas.height = 480;
-
-  // draw a black rectangle so that your plane doesn't start out transparent
-  videoCanvasCtx = videoCanvas.getContext('2d');
-  videoCanvasCtx.fillStyle = '#000000';
-  videoCanvasCtx.fillRect(0, 0, 640, 480);
-
   texture = new THREE.VideoTexture(video);
-  texture.needsUpdate = true;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
 
+  const geometry = new THREE.PlaneBufferGeometry(2, 2, 1, 1);
   const material = new THREE.MeshBasicMaterial({ map: texture });
-  const geometry = new THREE.PlaneBufferGeometry(2, 2, 0);
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.material.depthTest = false;
-  mesh.material.depthWrite = false;
+  material.depthTest = false;
+  material.depthWrite = false;
+  mesh = new THREE.Mesh(geometry, material);
 
   backgroundCamera = new THREE.Camera();
   backgroundScene = new THREE.Scene();

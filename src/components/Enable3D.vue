@@ -4,13 +4,29 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue';
+import { computed, defineComponent, watch } from 'vue';
+import { useStore } from '../store';
 import setupEnable3d from '../enable3d/enable3d';
+
+let rootEl: HTMLDivElement;
 
 export default defineComponent({
   mounted() {
-    const rootEl = this.$refs['canvas-container'] as HTMLDivElement;
-    setupEnable3d(rootEl);
+    rootEl = this.$refs['canvas-container'] as HTMLDivElement;
+  },
+
+  setup() {
+    const store = useStore();
+    let isSetup = false;
+
+    const settingsVisibleRef = computed(() => store.state.isSettingsVisible);
+    watch(settingsVisibleRef, () => {
+      if (!isSetup) {
+        isSetup = true;
+        setupEnable3d(rootEl);
+      }
+    });
+    return {};
   },
 });
 

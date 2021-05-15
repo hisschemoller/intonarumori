@@ -1,6 +1,7 @@
 import {
-  ExtendedObject3D, Project, Scene3D, PhysicsLoader, THREE,
+  Project, Scene3D, PhysicsLoader, THREE,
 } from 'enable3d';
+import { renderBackground, resizeBackground, setupBackground } from './background';
 
 const FOV = 45;
 const PLANE_ASPECT_RATIO = 16 / 9;
@@ -21,17 +22,13 @@ class MainScene extends Scene3D {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(rootEl.offsetWidth, rootEl.offsetHeight, true);
     this.renderer.setClearColor(0xbbddff);
+    this.renderer.autoClear = false;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap; // PCFSoftShadowMap
     rootEl.appendChild(this.renderer.domElement);
   }
 
   async create() {
-    // const warpSpeedContent = await this.warpSpeed('light', 'camera', 'lookAtCenter', 'ground');
-    // if (warpSpeedContent.orbitControls) {
-    //   this.orbitControls = warpSpeedContent.orbitControls;
-    // }
-
     if (this.physics.debug) {
       // this.physics.debug.enable();
     }
@@ -64,6 +61,23 @@ class MainScene extends Scene3D {
     directionalLight.shadow.camera.bottom = -SHADOW_SIZE;
     directionalLight.shadow.camera.far = SHADOW_FAR;
     this.scene.add(directionalLight);
+
+    setupBackground('video/wouter_hisschemoller_-_matthaikirchplatz_clouds_-_2020_1920x1080.mp4');
+    // setupBackground('video/berlijn-mathaïkirchplatz-2017-09-19-img_6786.mov');
+    // setupBackground('video/30_seconds_of_frame_counter.mp4');
+
+    this.physics.add.box({
+      x: 0, y: -0.05, z: 0, mass: 0, width: 0.1, height: 0.1, depth: 0.1,
+    }, { lambert: { color: 'blue' } });
+  }
+
+  update() {
+    if (isResize) {
+      isResize = false;
+      this.onCanvasResize();
+      resizeBackground(rootEl.offsetWidth, rootEl.offsetHeight);
+    }
+    renderBackground(this.renderer);
   }
 
   /**
@@ -90,13 +104,6 @@ class MainScene extends Scene3D {
 
     if (this.orbitControls) {
       this.orbitControls.update();
-    }
-  }
-
-  update() {
-    if (isResize) {
-      isResize = false;
-      this.onCanvasResize();
     }
   }
 }
