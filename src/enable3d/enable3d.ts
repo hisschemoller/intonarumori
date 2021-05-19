@@ -1,5 +1,5 @@
 import {
-  Project, Scene3D, PhysicsLoader, THREE,
+  ExtendedObject3D, Project, Scene3D, PhysicsLoader, THREE,
 } from 'enable3d';
 import { renderBackground, resizeBackground, setupBackground } from './background';
 
@@ -67,20 +67,6 @@ class MainScene extends Scene3D {
     setupBackground('video/matthaikirchplatz/berlijn-mathaïkirchplatz-2017-09-19-img_6786.mp4');
     // setupBackground('video/30_seconds_of_frame_counter.mp4');
 
-    // const loader = new THREE.CubeTextureLoader();
-    // loader.setPath('img/');
-    // const textureCube = loader.load([
-    //   'testimage3d.jpg',
-    //   'testimage3d.jpg',
-    //   'testimage3d.jpg',
-    //   'testimage3d.jpg',
-    //   'testimage3d.jpg',
-    //   'testimage3d.jpg',
-    // ]);
-    // const textureCube = new THREE.TextureLoader().load('img/testimage3d.jpg');
-    // textureCube.wrapS = THREE.RepeatWrapping;
-    // textureCube.wrapT = THREE.RepeatWrapping;
-    // textureCube.repeat.set(4, 4);
     this.add.box({
       x: 0, y: 0.5, z: 3, mass: 0, width: 1, height: 1, depth: 1,
     }, { phong: { color: 0x996600 } });
@@ -143,10 +129,33 @@ class MainScene extends Scene3D {
     texture6.wrapT = THREE.RepeatWrapping;
     texture6.repeat.set(0.6, 0.2);
     texture6.offset.set(0.2, 0.55);
-    // texture6.
     this.add.box({
       x: 0, y: -0.5, z: -30, mass: 0, width: 70, height: 1, depth: 18,
     }, { phong: { map: texture6, transparent: true, opacity: 0.5 } });
+
+    this.load.gltf('3d/matthaikirchplatz.glb').then(async (gltf) => {
+      console.log(gltf.scene.children);
+      const cloud0 = gltf.scene.getObjectByName('cloud0') as THREE.Mesh;
+      if (cloud0) {
+        cloud0.position.set(0, 5, 0);
+        this.scene.add(cloud0);
+        // const skyTexture = new THREE.TextureLoader().load('img/sky.jpg');
+        // const skyTexture = await this.load.texture('img/sky.jpg');
+        cloud0.material = new THREE.MeshPhongMaterial({ color: 0x9999ff });
+        // = new THREE.MeshPhongMaterial({
+        //   map: skyTexture,
+        // });
+        // const tex = new THREE.TextureLoader().load('img/sky.jpg');
+        // if (cloud0.geometry) {
+        //   const mesh = new THREE.Mesh(
+        //     cloud0.geometry,
+        //     new THREE.MeshPhongMaterial(tex),
+        //   );
+        //   mesh.position.set(0, 5, 0);
+        //   this.scene.add(mesh);
+        // }
+      }
+    });
   }
 
   update() {
