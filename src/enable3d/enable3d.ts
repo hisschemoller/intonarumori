@@ -2,6 +2,7 @@ import {
   ExtendedObject3D, Project, Scene3D, PhysicsLoader, THREE,
 } from 'enable3d';
 import { renderBackground, resizeBackground, setupBackground } from './background';
+import { setupClouds, updateClouds } from './clouds';
 
 const FOV = 45;
 const PLANE_ASPECT_RATIO = 16 / 9;
@@ -40,8 +41,8 @@ class MainScene extends Scene3D {
 
     // HEMI LIGHT
     const hemiLight = new THREE.HemisphereLight();
-    hemiLight.color.setHex(0x666666); // .setHSL(0.6, 0.6, 0.6);
-    hemiLight.groundColor.setHSL(0.1, 1, 0.4);
+    hemiLight.color.setHSL(0.55, 0.1, 0.3);
+    hemiLight.groundColor.setHSL(0.1, 0.1, 0.3);
     hemiLight.position.set(0, 50, 0);
     this.scene.add(hemiLight);
 
@@ -49,7 +50,7 @@ class MainScene extends Scene3D {
     const SHADOW_SIZE = 10;
     const SHADOW_FAR = 13500;
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 1.75, 1);
+    directionalLight.position.set(10, 17.5, 10);
     directionalLight.position.multiplyScalar(100);
     directionalLight.color.setHSL(0.1, 1, 0.95);
     directionalLight.castShadow = true;
@@ -64,8 +65,9 @@ class MainScene extends Scene3D {
 
     // setupBackground(
     // 'video/wouter_hisschemoller_-_matthaikirchplatz_clouds_-_2020_1920x1080.mp4');
-    setupBackground('video/matthaikirchplatz/berlijn-mathaïkirchplatz-2017-09-19-img_6786.mp4');
     // setupBackground('video/30_seconds_of_frame_counter.mp4');
+    setupBackground('video/matthaikirchplatz/berlijn-mathaïkirchplatz-2017-09-19-img_6786.mp4');
+    setupClouds(this);
 
     this.add.box({
       x: 0, y: 0.5, z: 3, mass: 0, width: 1, height: 1, depth: 1,
@@ -132,30 +134,6 @@ class MainScene extends Scene3D {
     this.add.box({
       x: 0, y: -0.5, z: -30, mass: 0, width: 70, height: 1, depth: 18,
     }, { phong: { map: texture6, transparent: true, opacity: 0.5 } });
-
-    this.load.gltf('3d/matthaikirchplatz.glb').then(async (gltf) => {
-      console.log(gltf.scene.children);
-      const cloud0 = gltf.scene.getObjectByName('cloud0') as THREE.Mesh;
-      if (cloud0) {
-        cloud0.position.set(0, 5, 0);
-        this.scene.add(cloud0);
-        // const skyTexture = new THREE.TextureLoader().load('img/sky.jpg');
-        // const skyTexture = await this.load.texture('img/sky.jpg');
-        cloud0.material = new THREE.MeshPhongMaterial({ color: 0x9999ff });
-        // = new THREE.MeshPhongMaterial({
-        //   map: skyTexture,
-        // });
-        // const tex = new THREE.TextureLoader().load('img/sky.jpg');
-        // if (cloud0.geometry) {
-        //   const mesh = new THREE.Mesh(
-        //     cloud0.geometry,
-        //     new THREE.MeshPhongMaterial(tex),
-        //   );
-        //   mesh.position.set(0, 5, 0);
-        //   this.scene.add(mesh);
-        // }
-      }
-    });
   }
 
   update() {
@@ -165,6 +143,7 @@ class MainScene extends Scene3D {
       resizeBackground(rootEl.offsetWidth, rootEl.offsetHeight);
     }
     renderBackground(this.renderer);
+    updateClouds();
   }
 
   /**
