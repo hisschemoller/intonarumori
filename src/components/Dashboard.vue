@@ -61,6 +61,7 @@ export default defineComponent({
   .dashboard-sidebar {
     flex-grow: 0;
     height: 0;
+    overflow: hidden;
     position: relative;
     transition: height 0.2s ease-out;
   }

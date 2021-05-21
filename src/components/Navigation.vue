@@ -2,12 +2,12 @@
   <ToolBar>
     <template #right>
       <Button
-        @click="toggleControls(true)"
+        @click="toggleControls"
         class="p-button p-button-icon-only p-button-rounded p-button-text">
         <i class="pi pi-sliders-v"></i>
       </Button>
       <Button
-        @click="toggleSettings(true)"
+        @click="toggleSettings"
         class="p-button p-button-icon-only p-button-rounded p-button-text">
         <i class="pi pi-cog"></i>
       </Button>
@@ -17,10 +17,11 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { mapMutations } from 'vuex';
 import ToolBar from 'primevue/toolbar';
 import Button from 'primevue/button';
+import { useStore } from '../store';
 import { MutationType } from '../store/mutations';
 
 export default defineComponent({
@@ -28,11 +29,34 @@ export default defineComponent({
     Button,
     ToolBar,
   },
-  methods: {
-    ...mapMutations({
-      toggleControls: MutationType.ToggleControls,
-      toggleSettings: MutationType.ToggleSettings,
-    }),
+  // methods: {
+  //   ...mapMutations({
+  //     toggleControls: MutationType.ToggleControls,
+  //     toggleSettings: MutationType.ToggleSettings,
+  //   }),
+  // },
+  setup() {
+    const store = useStore();
+
+    // const toggleControls = computed({
+    //   get: () => store.state.isControlsVisible,
+    //   set: () => store.commit(MutationType.ToggleControls, !store.state.isControlsVisible),
+    // });
+
+    const toggleControls = () => store.commit(
+      MutationType.ToggleControls, !store.state.isControlsVisible,
+    );
+
+    const toggleSettings = () => store.commit(
+      MutationType.ToggleSettings, !store.state.isSettingsVisible,
+    );
+
+    // const toggleSettings = computed({
+    //   get: () => store.state.isSettingsVisible,
+    //   set: () => store.commit(MutationType.ToggleSettings, !store.state.isSettingsVisible),
+    // });
+
+    return { toggleControls, toggleSettings };
   },
 });
 
