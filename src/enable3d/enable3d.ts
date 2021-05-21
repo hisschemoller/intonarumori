@@ -1,5 +1,5 @@
 import {
-  ExtendedObject3D, Project, Scene3D, PhysicsLoader, THREE,
+  Project, Scene3D, PhysicsLoader, THREE,
 } from 'enable3d';
 import { renderBackground, resizeBackground, setupBackground } from './background';
 import { setupClouds, updateClouds } from './clouds';
@@ -68,7 +68,7 @@ class MainScene extends Scene3D {
     // 'video/wouter_hisschemoller_-_matthaikirchplatz_clouds_-_2020_1920x1080.mp4');
     // setupBackground('video/30_seconds_of_frame_counter.mp4');
     setupBackground('video/matthaikirchplatz/berlijn-mathaïkirchplatz-2017-09-19-img_6786.mp4');
-    setupClouds(this);
+    setupClouds(this, this.cam);
     setupFloor(this);
 
     this.add.box({
@@ -83,7 +83,7 @@ class MainScene extends Scene3D {
       resizeBackground(rootEl.offsetWidth, rootEl.offsetHeight);
     }
     renderBackground(this.renderer);
-    updateClouds();
+    updateClouds(this);
   }
 
   /**
